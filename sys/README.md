@@ -12,7 +12,7 @@ setparams.c:
         benchmark for a specific class. The setparams program is never run 
         directly by a user. Its invocation syntax is 
 
-            "setparams benchmark-name class".
+            "setparams benchmark-name class"
 
         It examines the file "npbparams.h" in the current directory. If 
         the specified parameters are the same as those in the npbparams.h 
