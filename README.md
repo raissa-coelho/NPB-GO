@@ -1,18 +1,20 @@
 # NPB-GO
+Implementation of the NAS Benchmark using GO language.
 
-## Quem
-- Raissa
-- Bianca
+## Coders
+- Raissa NUnes Coelho, Engenharia de Computação da Universidade Federal de Pelotas(UFPEL)
+- Bianca Nunes Coelho, Engenharia de Computação da Universidade Federal de Pelotas(UFPEL)
 
-## Pastas
+
+## Files
 - config
 - sys
 - EP
 - common
 - bin
 
-## Conteúdo
-|Pasta | Conteúdo |
+## Content
+|Directory |Files |
 | :---|---:|
 |config | make.def|
 |sys | <ul><li>make.common</li><li>Makefile</li><li>print_header</li><li>print_instructions</li><li>setparams.go</li></ul>|
