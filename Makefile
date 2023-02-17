@@ -8,3 +8,13 @@ default: header
 EP: ep
 ep: header
         cd EP; $(MAKE) CLASS=$(CLASS)
+
+cleanall:
+        go clean
+        -rm -r bin/*
+
+header:
+        @ $(SHELL) sys/print_header
+
+help:
+        @ $(SHELL) sys/print_instructions
