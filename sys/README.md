@@ -3,10 +3,10 @@ This directory contains utilities and files used by the
 build process. You should not need to change anything
 in this directory. 
 
-Original Files
+# Original Files
 --------------
 setparams.c:
-        Source for the setparams program. This program is used internally
+    	Source for the setparams program. This program is used internally
         in the build process to create the file "npbparams.h" for each 
         benchmark. npbparams.h contains Fortran or C parameters to build a 
         benchmark for a specific class. The setparams program is never run 
