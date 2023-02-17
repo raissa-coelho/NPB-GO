@@ -1,9 +1,9 @@
 # NPB-GO
-Implementation of the NAS Benchmark using GO language.
+Implementation of the NAS Benchmark using GO language. 
 
 ## Coders
-- Raissa NUnes Coelho, Engenharia de Computação da Universidade Federal de Pelotas(UFPEL)
-- Bianca Nunes Coelho, Engenharia de Computação da Universidade Federal de Pelotas(UFPEL)
+- Raissa Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
+- Bianca Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
 
 
 ## Files
