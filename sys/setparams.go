@@ -104,8 +104,24 @@ func write_info(typeB int, class string){
 }
 
 //EP benchmark information
-func writeEP(){
-		
-
+func writeEP( class string ){
+	if class == "S"{
+	   M := 24
+	}else if class == "w" {
+		M := 25
+	}else if class == "A" {
+		M := 28
+	}else if class == "B" {
+		M := 30 
+	}else if class == "C" {
+		M := 32
+	}else if class == "D" {
+		M := 36
+	}else if class == "E" {
+		M := 40
+	}else {
+		fmt.Println("npbparams.go: INternal error: invalid class type")
+		os.Exit(1)
+	}
 }
 
