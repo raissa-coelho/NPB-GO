@@ -12,8 +12,8 @@ all: setparams
 # was compiled and linked
 
 setparams: setparams.go ../config/make.def
-	   $(UCC) build -o setparams setparams.go
+	   $(UGO) build -o setparams setparams.go
 
 clean: 
-	-rm -f setparams setparams.h npbparams.h
-	-rm -f *~ *.o
+	go clean
+	rm 
