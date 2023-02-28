@@ -1,10 +1,9 @@
-UCC = cc
 include ../config/make.def
 
 # Note that COMPILE is also defined in make.common and should
 # be the same. We can't include make.common because it has a lot
 # of other garbage. 
-FCOMPILE = $(GOC) run $(GO_INC)
+GOCOMPILE = go build -o 
 
 all: setparams 
 
@@ -13,7 +12,7 @@ all: setparams
 # was compiled and linked
 
 setparams: setparams.go ../config/make.def
-
+	   $(UCC) build -o setparams setparams.go
 
 clean: 
 	-rm -f setparams setparams.h npbparams.h
