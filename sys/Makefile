@@ -3,7 +3,7 @@ include ../config/make.def
 # Note that COMPILE is also defined in make.common and should
 # be the same. We can't include make.common because it has a lot
 # of other garbage. 
-GOCOMPILE = go build -o 
+GOCOMPILE = $(GCCGO) build $(GO_INC) $(GOFLAGS)
 
 all: setparams 
 
