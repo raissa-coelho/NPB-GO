@@ -39,8 +39,6 @@ ${COMMON}/wtime.o: ${COMMON}/${WTIME} ../config/make.def
 	cd ${COMMON}; ${GOCOMPILE} ${MACHINE} -o wtime.o ${COMMON}/${WTIME}
 # For most machines or CRAY or IBM
 #	cd ${COMMON}; ${GOCOMPILE} ${MACHINE} ${COMMON}/wtime.go
-# For a precise timer on an SGI Power Challenge, try:
-#	cd ${COMMON}; ${GOCOMPILE} -o wtime.o ${COMMON}/wtime_sgi64.go
 
 ${COMMON}/c_wtime.o: ${COMMON}/${WTIME} ../config/make.def
 	cd ${COMMON}; ${GOCOMPILE} -o c_wtime.o ${COMMON}/${WTIME}
