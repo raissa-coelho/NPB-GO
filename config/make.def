@@ -82,7 +82,6 @@ RAND   = randi8
 # The variable WTIME is the name of the wtime source code module in the
 # common directory.  
 # For most machines,       use wtime.go
-# For SGI power challenge: use wtime_sgi64.c
 #---------------------------------------------------------------------------
 WTIME  = wtime.go
 
