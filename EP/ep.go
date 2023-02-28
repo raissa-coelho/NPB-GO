@@ -3,10 +3,26 @@ package ep
 import (
 	"fmt"
 	"os"
+	"math"
 )
 
-func EP(){
+//Defining constants
+const MM = M - MK
+const NN = 0
+const NK = 1 << MK
+const NQ = 10
+const EPSILON = 1.0e-8
+const A = 1220703125.0
+const S = 271828183.0
+const NK_PLUS = (2*NK)+1
 
+func EP(){
+	//Variables for verification of success
+	var verified bool
+	var sx_err float64
+	var sy_err float64
+	var sx_verify_value float64
+	var sy_verify_value float64	
 
 
 
@@ -14,7 +30,7 @@ func EP(){
 
 
 	//Verification of the values.
-	verified := true
+	verified = true
 	
 	if M == 24 {
 		sx_verify_value = -3.247834652034740e+3;
@@ -38,11 +54,13 @@ func EP(){
 		sx_verify_value = -5.319717441530e+05;
 		sy_verify_value = -3.688834557731e+05;
 	}else {
-		verified := false
+		verified = false
 	}
 	
 	if verified == true {
-		sx_err =
+		x_err = math.Abs((sx - sx_verify_value) / sx_verify_value)
+		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
+		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
 	}
 	
 	//Print of the results of the benchmark.
