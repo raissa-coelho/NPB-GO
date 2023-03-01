@@ -8,7 +8,7 @@ const t46 float64
 import ("math")
 
 // não sei se é bool ?
-func define(use_pow bool){
+func Define(use_pow bool){
 	if use_pow {
 		r23 = math.Pow(0.5, 23.0)
 		r46 = r23*r23
