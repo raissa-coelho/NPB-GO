@@ -1,6 +1,8 @@
 # NPB-GO
 Implementation of the NAS Benchmark using GO language. 
 
+-- Oi teste
+
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
 - Bianca Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
