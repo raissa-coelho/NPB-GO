@@ -13,7 +13,7 @@
 #
 # GCCGO        - GO compiler
 # GOFLAGS     - GO compilation arguments
-# GO_INC      - any -I arguments required for compiling GO 
+# GO_INC      - any arguments required for compiling GO 
 # GOLINK      - GO linker
 # GOLINKGOLAGS - GO linker arguments
 # GO_LIB      - any -L and -l arguments required for linking GO 
