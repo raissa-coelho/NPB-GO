@@ -19,7 +19,7 @@
 // Bianca Nunes Cooelho
 // Raíssa Nunes coelho
 
-package ep
+package EP
 
 import (
 	"fmt"
