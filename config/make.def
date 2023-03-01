@@ -26,7 +26,7 @@
 #---------------------------------------------------------------------------
 # This is the go compiler used for go programs
 #---------------------------------------------------------------------------
-GCCGO = gccgo
+GCCGO = go
 #
 GOLINK	= $(GCCGO)
 
@@ -58,7 +58,7 @@ GOLINKGOFLAGS = -g -02
 # this compiler go here also; typically there are few flags required; hence 
 # there are no separate macros provided for such flags.
 #---------------------------------------------------------------------------
-UGO	= gccgo
+UGO	= go
 
 
 #---------------------------------------------------------------------------
