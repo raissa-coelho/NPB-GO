@@ -22,7 +22,7 @@ func randlc(*x, a float64){
 	return (r46 * (*x))
 }
 
-func vrandlc(n int, *x_speed float64, float64 a, y []float64){
+func vrandlc(n int, *x_speed float64, a float64, y []float64){
 	var i int
 	var x,t1,t2,t3,t4,a1,a2,x1,x2,z float64
 
