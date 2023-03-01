@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-func c_print_results( name string,
+func C_print_results( name string,
 	class,opType string
 	n1,n2,n3,niter,passed_verification int	
 	Mops,t float64
