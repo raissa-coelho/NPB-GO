@@ -13,5 +13,6 @@ ${PROGRAM}: config ${OBJS}
 
 ep.o:		TODO
 
-clean:
-	- rm -f *.o *~
+clean:	
+	go clean
+	rm -f *.o *~
