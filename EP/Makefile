@@ -9,7 +9,7 @@ OBJS = TODO
 include ../sys/make.common
 
 ${PROGRAM}: config ${OBJS}
-	${GOLINK} ${GOLINKFLAGS} -o ${PROGRAM} ${OBJS} ${GO_LIB}
+	${GOLINK} ${GOLINKFLAGS} ${PROGRAM} ${OBJS} ${GO_LIB}
 
 ep.o:		TODO
 
