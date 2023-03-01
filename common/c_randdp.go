@@ -1,5 +1,28 @@
 package common
 
+const r23 float64
+const r46 float64
+const t23 float64
+const t46 float64
+
+import ("math")
+
+// não sei se é bool ?
+func define(use_pow bool){
+	if use_pow {
+		r23 = math.Pow(0.5, 23.0)
+		r46 = r23*r23
+		t23 = math.Pow(2.0, 23.0)
+		t46 = t23*t23
+	}else{
+		r23 = (0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5*0.5)
+		r46 = r23 * r23
+		t23 = (2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0*2.0)
+		t46 = t23*t23
+	}
+}
+
+
 func Randlc(*x, a float64){
 	var t1,t2,t3,t4,a1,a2,x1,x2,z float64
 
