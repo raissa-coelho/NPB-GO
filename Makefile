@@ -11,7 +11,7 @@ ep: header
 
 cleanall:
         go clean
-        -rm -r bin/*
+        rm bin/*
 
 header:
         @ $(SHELL) sys/print_header
