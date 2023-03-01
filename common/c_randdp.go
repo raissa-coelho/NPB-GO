@@ -1,9 +1,9 @@
 package common
 
-const r23 float64
-const r46 float64
-const t23 float64
-const t46 float64
+var r23 float64
+var r46 float64
+var t23 float64
+var t46 float64
 
 import ("math")
 
