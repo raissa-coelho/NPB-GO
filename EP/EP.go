@@ -39,6 +39,7 @@ const A = 1220703125.0
 const S = 271828183.0
 const NK_PLUS = ((2*NK)+1)
 
+
 func Ep(class string, M int){
 	var MM = M - MK
 	var NN = 1 << MM	
@@ -66,7 +67,7 @@ func Ep(class string, M int){
 	
 	np = NN
 
-	r.Vrancl(0, &dum[0], dum[1], dum[2])
+	r.Vrandlc(0, &dum[0], dum[1], dum[2])
 	dum[0] = r.Randlc(&dum[1], dum[2])
 	for i := 0; i < NK_PLUS; i++{
 		x[i] = -1.0e99
@@ -74,12 +75,11 @@ func Ep(class string, M int){
 	Mops = math.Log(math.Sqrt(math.Max(1.0,1.0)))
 
 	t1 = A
-	r.Vranlc(0,&t1,A,x[:])
-	t1 = A
+	r.Vrandlc(0,&t1,A,x[:])
 	
 	for i := 0; i < MK-1; i++{
 		r.Randlc(&t1,t1)
-	} 
+	}
 	
 	an = t1
 	t = S
@@ -124,7 +124,7 @@ func Ep(class string, M int){
 				t3 = r.Randlc(&t2,t2)
 				kk = ik
 			}
-			r.Vranlc((2*NK), &t1, A, x)
+			r.Vrandlc((2*NK), &t1, A, x)
 			
 			for i := 0; i< NK; i++{
 				x1 = 2.0 * x[2*i] - 1.0
@@ -200,7 +200,7 @@ func Ep(class string, M int){
 		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
 		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
 	}
-	Mops = math.Pow(2.0, float64(M+1))/ (*t.Seconds)/1000000.0	
+	Mops = math.Pow(2.0, float64(M+1))/ (*t)/1000000.0	
 		
 	//Print of the results of the benchmark.
 	 fmt.Println("EP Benchmark Results:")
