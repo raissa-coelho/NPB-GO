@@ -4,12 +4,9 @@ import(
 	ep "NPB-GO/EP"
 	"fmt"
 	"os"
-	"time"
 	"runtime"
 	"log"
 )
-
-var benchmark_types [10]string = {"SP", "BT", "LU", "MG", "FT", "IS", "EP", "CG", "UA", "DC"}
 
 func init(){
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -19,7 +16,6 @@ func main(){
 	
 	var typeBench int
 	var class string
-	//var class_old string
 	
 	//Verify number of arguments passed in the command line
 	if len(os.Args) != 3 {
@@ -34,21 +30,12 @@ func main(){
 		check_info(typeBench,class)
 	}
 
-	//read_info(typeBench, &class_old)
 	write_info(typeBench, class)
-	
-	//if class != class_old {
-	//	fmt.Printf("Writing...")
-	//	write_info(typeBench,class)
-	//}else{
-	//	fmt.Println("setparams: File unmodified.")
-	//}
-
 
 }
 
 //Verify if benchmark_name is ok
-func get_info(args string,*typeBench int, *classp string){
+func get_info(args[] string, typeBench *int, classp *string){
 
 	*classp = args[2]
 	
@@ -87,11 +74,6 @@ func check_info(typeB int, class string){
 	}
 }
 
-//Read file of a previous benchmark
-func read_info(typeB int, classOld string){
-	//to be done at a later date
-}
-
 //Write settings
 func write_info(typeB int, class string){
 	file, err := os.Create("npbparams.txt")
@@ -110,7 +92,7 @@ func write_info(typeB int, class string){
 	case 6: writeEP(file, class)	   
 	
 	default: fmt.Println("setparams: Error. Unknown benchmark type.")
-		 f.Close()
+		 file.Close()
 		 os.Exit(1)
 	}		
 }
@@ -136,7 +118,7 @@ func writeEP(f *os.File, class string ){
 		fmt.Println("setparams: Internal error: invalid class type")
 		os.Exit(1)
 	}
-	defer f.CLose()
+	defer f.Close()
 	_,err1 := f.WriteString(class)
 	if err1 != nil{
 		log.Fatal(err1)

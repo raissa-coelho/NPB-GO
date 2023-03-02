@@ -24,7 +24,6 @@ package EP
 import (
 	r "NPB-GO/common"
 	"fmt"
-	"os"
 	"math"
 	"time"
 	"runtime"
@@ -39,6 +38,11 @@ const A = 1220703125.0
 const S = 271828183.0
 const NK_PLUS = ((2*NK)+1)
 
+type Results struct{
+	qqR [NQ]float64
+	sxx float64
+	syy float64
+}
 
 func Ep(class string, M int){
 	var MM = M - MK
@@ -66,8 +70,8 @@ func Ep(class string, M int){
 	verified = false
 	
 	np = NN
-
-	r.Vrandlc(0, &dum[0], dum[1], dum[2])
+	
+	r.Vrandlc(0, &dum[0], dum[1], []float64{dum[2]})
 	dum[0] = r.Randlc(&dum[1], dum[2])
 	for i := 0; i < NK_PLUS; i++{
 		x[i] = -1.0e99
@@ -92,12 +96,8 @@ func Ep(class string, M int){
 	}
 	
 	//GO Channels - buffered
-	qR := make([]chan float64, np)
-	for i:= 0; i<len(qR);i++{
-		qR[i] = make(chan float64)
-	}
-	sxR := make(chan float64, np)
-	syR := make(chan float64, np)
+	var rr Results
+	result := make(chan Results,np) 
 	
 	//Begining of parallel programing
 	k_offset = -1
@@ -105,10 +105,12 @@ func Ep(class string, M int){
 	for k := 1; k <= np; k++{
 		go func(k int){
 			//Temporary varible
+			var SX, SY float64
 			var t1,t2,t3,t4,x1,x2 float64
 			var kk, ik, l int
 			var qq = [NQ]float64{}
 			var x = [NK_PLUS]float64{}
+			var rrTemp Results
 			kk = k_offset + k
 			t1 = S
 			t2 = an
@@ -124,7 +126,7 @@ func Ep(class string, M int){
 				t3 = r.Randlc(&t2,t2)
 				kk = ik
 			}
-			r.Vrandlc((2*NK), &t1, A, x)
+			r.Vrandlc((2*NK), &t1, A, x[:])
 			
 			for i := 0; i< NK; i++{
 				x1 = 2.0 * x[2*i] - 1.0
@@ -136,31 +138,30 @@ func Ep(class string, M int){
 					t4 = (x2 * t2)
 					l = int(math.Max(math.Abs(t3), math.Abs(t4)))
 					qq[l] += 1.0
-					sx = sx + t3
-					sy = sy + t4
+					SX = SX + t3
+					SY = SY + t4
 				}
 			}
-			syR <- sy
-			sxR <- sx
-			qR <- qq 
+			rrTemp.syy = SY
+			rrTemp.sxx = SX
+			rrTemp.qqR = qq
+			result <- rrTemp
 		}(k)
 		
 		for i := 0; i<= np; i++{
-			sx <- sxR
-			sy <- syR
-			for j := 0; j < NQ-1; j++{
-				q[j] <- qR[j]
-			}
+			rr = <-result
+			sx = rr.sxx
+			sy = rr.syy
+			q = rr.qqR
+		
 		}
 	
 	} 
 	//End of parrallel programing
 	stop := time.Now()
-	*t = stop.Sub(start)
+	t = stop.Sub(start)
 	
-	close(qR)
-	close(sxR)
-	close(syR)
+	close(result)
 	
 	for i := 0; i < NQ-1; i ++{
 		gc = gc + q[i]
@@ -200,11 +201,10 @@ func Ep(class string, M int){
 		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
 		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
 	}
-	Mops = math.Pow(2.0, float64(M+1))/ (*t)/1000000.0	
+	Mops = math.Pow(2.0, float64(M+1))/(t.Seconds())/1000000.0	
 		
 	//Print of the results of the benchmark.
-	 fmt.Println("EP Benchmark Results:")
-	 fmt.Printf("CPU Time = %v\n", tm)	
+	 fmt.Println("EP Benchmark Results:")	
 	 fmt.Printf("N = %v\n", M)
 	 fmt.Printf("No. Gaussian Pairs = %v\n", gc)
 	 fmt.Printf("Sums = %v %v\n", sx,sy)
@@ -214,6 +214,6 @@ func Ep(class string, M int){
 	 }
 	
 	
-	r.C_print_results( "EP",class,"Random Numbers Generated",nit,verified,Mops,&t,runtime.NumCPU())
+	r.C_print_results( "EP",class,"Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
 		 
 }
