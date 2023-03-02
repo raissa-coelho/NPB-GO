@@ -74,7 +74,7 @@ func Ep(class string, M int){
 	Mops = math.Log(math.Sqrt(math.Max(1.0,1.0)))
 
 	t1 = A
-	r.Vranlc(0,&t1,A,x)
+	r.Vranlc(0,&t1,A,x[:])
 	t1 = A
 	
 	for i := 0; i < MK-1; i++{
@@ -100,7 +100,7 @@ func Ep(class string, M int){
 	syR := make(chan float64, np)
 	
 	//Begining of parallel programing
-	
+	k_offset = -1
 	start := time.Now()
 	for k := 1; k <= np; k++{
 		go func(k int){
@@ -109,8 +109,7 @@ func Ep(class string, M int){
 			var kk, ik, l int
 			var qq = [NQ]float64{}
 			var x = [NK_PLUS]float64{}
-			k_offset = -1
-			kk = k_offest + k
+			kk = k_offset + k
 			t1 = S
 			t2 = an
 			
