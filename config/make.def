@@ -79,14 +79,6 @@ RAND   = randi8
 
 
 #---------------------------------------------------------------------------
-# The variable WTIME is the name of the wtime source code module in the
-# common directory.  
-# For most machines,       use wtime.go
-#---------------------------------------------------------------------------
-WTIME  = wtime.go
-
-
-#---------------------------------------------------------------------------
 # Enable if either Cray (not Cray-X1) or IBM: 
 # (no such flag for most machines: see common/wtime.h)
 # This is used by the C compiler to pass the machine name to common/wtime.h,
