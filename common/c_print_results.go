@@ -35,9 +35,9 @@ func C_print_results( name string,
 	fmt.Priintln("Mop/s total =", Mops)
 	fmt.Println("Operation type =", opType)
 	
-	if passed_verification < 0{
+	if(passed_verification < 0){
 		fmt.Println("Verification = NOT PERFORMED")
-	}else if passed_verification{
+	}else if(passed_verification){
 		fmt.Println("Verification = SUCCESSFUL")
 	}else{
 		fmt.Println("Verification = UNSUCCESSFUL")
