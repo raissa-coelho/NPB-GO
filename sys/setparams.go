@@ -22,7 +22,7 @@ func main(){
 	//var class_old string
 	
 	//Verify number of arguments passed in the command line
-	if len(os.Args) != 4 {
+	if len(os.Args) != 3 {
 		fmt.Println("Usage: make benchmark_name CLASS=benchmark_type ")
 	}
 	args := os.Args
@@ -30,7 +30,7 @@ func main(){
 	//Verify if arguments are right
 	get_info(args,&typeBench,&class)
 	if class != "U"{
-		fmt.Println("setparams: For benchmark ",args[2],"class = ",class)
+		fmt.Println("setparams: For benchmark ",args[1],"class = ",class)
 		check_info(typeBench,class)
 	}
 
@@ -50,27 +50,27 @@ func main(){
 //Verify if benchmark_name is ok
 func get_info(args string,*typeBench int, *classp string){
 
-	*classp = args[3]
+	*classp = args[2]
 	
-	if (args[2] == "SP" || args[2] == "sp") {
+	if (args[1] == "SP" || args[1] == "sp") {
 	   *typeBench = 0
-	}else if (args[2] == "BT" || args[2] == "bt") {
+	}else if (args[1] == "BT" || args[1] == "bt") {
 	   *typeBench = 1
-	}else if (args[2] == "LU" || args[2] == "lu") {
+	}else if (args[1] == "LU" || args[1] == "lu") {
 	   *typeBench = 2
-	}else if (args[2] == "MG" || args[2] == "mg") {
+	}else if (args[1] == "MG" || args[1] == "mg") {
 	   *typeBench = 3
-	}else if (args[2] == "FT" || args[2] == "ft") {
+	}else if (args[1] == "FT" || args[1] == "ft") {
 	   *typeBench = 4
-	}else if (args[2] == "IS" || args[2] == "is") {
+	}else if (args[1] == "IS" || args[1] == "is") {
 	   *typeBench = 5
-	}else if (args[2] == "EP" || args[2] == "ep") {
+	}else if (args[1] == "EP" || args[1] == "ep") {
 	   *typeBench = 6
-	}else if (args[2] == "CG" || args[2] == "cg") {
+	}else if (args[1] == "CG" || args[1] == "cg") {
 	   *typeBench = 7
-	}else if (args[2] == "UA" || args[2] == "ua") {
+	}else if (args[1] == "UA" || args[1] == "ua") {
 	   *typeBench = 8
-	}else if (args[2] == "DC" || args[2] == "dc") {
+	}else if (args[1] == "DC" || args[1] == "dc") {
 	   *typeBench = 9
 	}else{
 		fmt.Println("setparams: Error: unknown benchmark type: " + args[1])

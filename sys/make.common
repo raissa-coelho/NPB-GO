@@ -20,10 +20,10 @@ config:
 	../sys/setparams ${BENCHMARK} ${CLASS}
 
 COMMON=../common
-${COMMON}/c_randdp.o: ${COMMON}/c_randdp.go ../config/make.def
+${COMMON}/c_randdp.o: ${COMMON}/c_randdp.go
 	cd ${COMMON}; ${GOCOMPILE} c_randdp.go
 
-${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go ../config/make.def
+${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go
 	cd ${COMMON}; ${GOCOMPILE} c_print_results.go
 
 # Normally setparams updates npbparams.h only if the settings (CLASS)
@@ -39,5 +39,4 @@ ${BENCHMARK}:  default
 ${BENCHMARKU}: default
 
 .SUFFIXES:
-.SUFFIXES: .h .go .o
-
+.SUFFIXES: .go .o
