@@ -22,6 +22,7 @@
 package EP
 
 import (
+	r "NPB-GO/common"
 	"fmt"
 	"os"
 	"math"
@@ -216,6 +217,6 @@ func EP(){
 	 	fmt.Printf("%v - %v\n", i, q[i])
 	 }
 	
-	np.c_print_results()
+	r.C_print_results()
 		 
 }
