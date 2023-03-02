@@ -23,7 +23,7 @@ func Define(use_pow bool){
 }
 
 
-func Randlc(*x, a float64){
+func Randlc(*x, a float64) float64{
 	var t1,t2,t3,t4,a1,a2,x1,x2,z float64
 
 	t1 = r23*a
