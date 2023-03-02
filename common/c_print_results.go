@@ -12,7 +12,7 @@ func C_print_results( name string,
 	niter int,
 	passed_verification int,	
 	Mops float64,
-	*t time.Duration
+	t *time.Duration
 	npbVersion string,
 	compileTime string,
 	compileVersion string,
