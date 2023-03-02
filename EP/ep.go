@@ -219,8 +219,8 @@ func EP(){
 	
 	r.C_print_results( "EP",
 		class,
-		opType string,
-		0,
+		"Random Numbers Generated",
+		nit,
 		verified,	
 		Mops,
 		&t,
