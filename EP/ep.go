@@ -227,7 +227,7 @@ func EP(){
 		npbVersion string,
 		compileTime string,
 		compileVersion string,
-		totalThreads string,
+		string(k),
 		goc string, 
 		golink string, 
 		go_lib string,
