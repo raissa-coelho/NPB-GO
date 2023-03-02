@@ -5,7 +5,7 @@ BENCHMARKU=EP
 include ../config/make.def
 
 OBJS = ep.o ${COMMON}/c_print_results.o ${COMMON}/c_${RAND}.o \
-       ${COMMON}/c_timers.o ${COMMON}/c_wtime.o
+	${COMMON}/c_timers.o ${COMMON}/c_wtime.o
 
 include ../sys/make.common
 
@@ -15,6 +15,6 @@ ${PROGRAM}: config ${OBJS}
 ep.o:	ep.go npbparams.go
 	${GOCOMPILE} ep.go
 
-clean:	
+clean:		
 	go clean
 	rm -f *.o *~

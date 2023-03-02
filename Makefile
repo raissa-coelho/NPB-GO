@@ -3,18 +3,18 @@ CLASS=S
 SFILE=config/suite.def
 
 default: header
-        @ $(SHELL) sys/print_instructions
+	@ $(SHELL) sys/print_instructions
 
 EP: ep
 ep: header
-        cd EP; $(MAKE) CLASS=$(CLASS)
+	cd EP; $(MAKE) CLASS=$(CLASS)
 
 cleanall:
-        go clean
-        rm bin/*
+	go clean	
+	rm bin/*
 
 header:
-        @ $(SHELL) sys/print_header
+	@ $(SHELL) sys/print_header
 
 help:
-        @ $(SHELL) sys/print_instructions
+	@ $(SHELL) sys/print_instructions

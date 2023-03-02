@@ -12,8 +12,8 @@ all: setparams
 # was compiled and linked
 
 setparams: setparams.go ../config/make.def
-	   $(UGO) mod init NPB-GO
-	   $(UGO) build -o setparams setparams.go
+	$(UGO) mod init NPB-GO
+	$(UGO) build -o setparams setparams.go
 
 clean: 
 	go clean
