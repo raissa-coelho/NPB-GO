@@ -9,7 +9,7 @@ import(
 	"log"
 )
 
-var benchmark_types [10]string = {SP, BT, LU, MG, FT, IS, EP, CG, UA, DC}
+var benchmark_types [10]string = {"SP", "BT", "LU", "MG", "FT", "IS", "EP", "CG", "UA", "DC"}
 
 func init(){
 	runtime.GOMAXPROCS(runtime.NumCPU())

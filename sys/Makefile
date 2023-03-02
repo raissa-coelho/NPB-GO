@@ -13,7 +13,7 @@ all: setparams
 
 setparams: setparams.go ../config/make.def
 	$(UGO) mod init NPB-GO
-	$(UGO) build -o setparams setparams.go
+	$(UGO) build -o setparams.o setparams.go
 
 clean: 
 	go clean

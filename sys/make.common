@@ -20,8 +20,8 @@ config:
 	../sys/setparams ${BENCHMARK} ${CLASS}
 
 COMMON=../common
-${COMMON}/${RAND}.o: ${COMMON}/${RAND}.go ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} ${RAND}.go
+${COMMON}/c_randdp.o: ${COMMON}/c_randdp.go ../config/make.def
+	cd ${COMMON}; ${GOCOMPILE} c_randdp.go
 
 ${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go ../config/make.def
 	cd ${COMMON}; ${GOCOMPILE} c_print_results.go
