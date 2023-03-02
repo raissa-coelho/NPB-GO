@@ -104,8 +104,9 @@ func write_info(typeB int, class string){
 	case 6: writeEP(file, class)	   
 	
 	default: fmt.Println("setparams: Error. Unknown benchmark type.")
+		 f.Close()
+		 os.Exit(1)
 	}		
-	file.Close()
 }
 
 //EP benchmark information
