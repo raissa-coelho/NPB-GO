@@ -1,6 +1,7 @@
 package main
 
 import(
+	ep "NPB-GO/EP"
 	"fmt"
 	"os"
 	"time"
@@ -140,4 +141,6 @@ func writeEP(f *os.File, class string ){
 	if err2 != nil{
 		log.Fatal(err1)
 	}	
+	
+	ep.Ep(&f)
 }
