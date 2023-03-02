@@ -11,7 +11,7 @@ include ../sys/make.common
 ${PROGRAM}: config ${OBJS}
 	${GOLINK} ${GOLINKFLAGS} ${PROGRAM} ${OBJS} ${GO_LIB}
 
-EP.o:		EP.go
+EP.o:	EP.go
 	${GOCOMPILE} EP.go
 
 clean:		

@@ -6,31 +6,14 @@ import (
 	"runtime"
 )
 
-func C_print_results( name string,
-	class string,
-	opType string,
-	niter int,
-	passed_verification bool,	
-	Mops float64,
-	t *time.Duration,
-	totalThreads string
-	/*,
-	goc string, 
-	golink string, 
-	go_lib string,
-	go_inc string,
-	goflags string,
-	golinkgoflags string,
-	rand string
-	*/
-){
-	fmt.Println("Benchmark Completed", name)
-	fmt.Println("class_npb =", class)
-	fmt.Println("Total threads =", totalThreads)
-	fmt.Println("Iterations =", niter)
-	fmt.Println("Time in seconds =", *t)
-	fmt.Priintln("Mop/s total =", Mops)
-	fmt.Println("Operation type =", opType)
+func C_print_results(name string, class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads string){
+	fmt.Printf("Benchmark Completed = %v\n", name)
+	fmt.Printf("Class_npb =%v\n", class)
+	fmt.Printf("Total threads =%v\n", totalThreads)
+	fmt.Printf("Iterations =%v\n", niter)
+	fmt.Printf("Time in seconds =%v\n", *t)
+	fmt.Printf("Mops total =%v\n", Mops)
+	fmt.Printf("Operation type =%v\n", opType)
 	
 	if(passed_verification){
 		fmt.Println("Verification = SUCCESSFUL")
@@ -39,15 +22,14 @@ func C_print_results( name string,
 	}
 	
 	fmt.Println("Compiler Version =", runtime.Version())
-	/*
-	fmt.Println("Compile options:")
-	fmt.Println("GOC =", goc)
-	fmt.Println("GOLINK =", golink)
-	fmt.Println("GO_LIB =", go_lib)
-	fmt.Println("GO_INC =", go_inc)
-	fmt.Println("GOFLAGS =", goflags)
-	fmt.Println("GOLINKFLAGS =", golinksflags)
-	fmt.Println("RAND =", rand)
+	//fmt.Println("Compile options:")
+	//fmt.Println("GOC =", goc)
+	//fmt.Println("GOLINK =", golink)
+	//fmt.Println("GO_LIB =", go_lib)
+	//fmt.Println("GO_INC =", go_inc)
+	//fmt.Println("GOFLAGS =", goflags)
+	//fmt.Println("GOLINKFLAGS =", golinksflags)
+	//fmt.Println("RAND =", rand)
 	
 	/* 
 	 * fmt.Printf(" Please send the results of this run to:\n\n");

@@ -9,6 +9,9 @@ EP: ep
 ep: header
 	cd EP; $(MAKE) CLASS=$(CLASS)
 
+init: 
+	go mod init NPB-GO
+
 cleanall:
 	go clean	
 	rm bin/*

@@ -5,15 +5,14 @@ include ../config/make.def
 # of other garbage. 
 GOCOMPILE = $(GCCGO) build $(GO_INC) $(GOFLAGS)
 
-all: setparams 
+all: setparams
 
 # setparams creates an npbparam.h file for each benchmark 
 # configuration. npbparams.h also contains info about how a benchmark
 # was compiled and linked
 
 setparams: setparams.go ../config/make.def
-	$(UGO) mod init NPB-GO
-	$(UGO) build -o setparams setparams.go
+	$(UGO) build -o setparams.go
 
 clean: 
 	$(UGO) clean
