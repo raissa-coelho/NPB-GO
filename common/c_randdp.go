@@ -50,7 +50,7 @@ func Vrandlc(n int, *x_speed float64, a float64, y []float64){
 	t1 = r23 * a
 	a1 = int64(t1)
 	a2 = a - t23 * a1
-	x - *x_speed
+	x  = *x_speed
 
 	for i:=0; i < n; i++{
 		t1 = r23 * x
