@@ -60,7 +60,7 @@ func Ep(class string, M int){
 	var sy_verify_value float64	
 	
 	fmt.Println("NAS Parallel Benchmark Parallel GO version - EP Benchmark")
-	fmt.Println("Number of random numbers generated", math.Pow(2.0,M+1))
+	fmt.Println("Number of random numbers generated", math.Pow(2.0,float64(M+1)))
 	
 	verified = false
 	
@@ -93,33 +93,33 @@ func Ep(class string, M int){
 	
 	//GO Channels - buffered
 	qR := make([]chan float64, np)
-	for i:= 0; i<lenght(qR);i++{
+	for i:= 0; i<len(qR);i++{
 		qR[i] = make(chan float64)
 	}
 	sxR := make(chan float64, np)
 	syR := make(chan float64, np)
 	
 	//Begining of parallel programing
-	k_offset = -1
 	
-	start := t.Now()
+	start := time.Now()
 	for k := 1; k <= np; k++{
 		go func(k int){
 			//Temporary varible
 			var t1,t2,t3,t4,x1,x2 float64
-			var kk, i, ik, l int
+			var kk, ik, l int
 			var qq = [NQ]float64{}
 			var x = [NK_PLUS]float64{}
+			k_offset = -1
 			kk = k_offest + k
 			t1 = S
 			t2 = an
 			
-			for i := 1; i <=100; i++{
+			for i:=1; i <=100; i++{
 				ik = kk/2
-				if (2*ik) != kk{
+				if ((2*ik) != kk){
 					t3 = r.Randlc(&t1,t2)
 				}
-				if ik == 0{
+				if (ik == 0){
 					break
 				}
 				t3 = r.Randlc(&t2,t2)
@@ -130,9 +130,9 @@ func Ep(class string, M int){
 			for i := 0; i< NK; i++{
 				x1 = 2.0 * x[2*i] - 1.0
 				x2 = 2.0 * x[2*i+1] - 1.0
-				t1 = mah.Pow(x1,2) + math.Pow(x2,2)
-				if t1 <= 1.0{
-					t2 = math.Sqrt(-2.0 * math.Log(t1) / t1)
+				t1 = math.Pow(x1,2) + math.Pow(x2,2)
+				if (t1 <= 1.0){
+					t2 = math.Sqrt((-2.0) * math.Log(t1) / t1)
 					t3 = (x1 * t2)
 					t4 = (x2 * t2)
 					l = int(math.Max(math.Abs(t3), math.Abs(t4)))
@@ -143,15 +143,9 @@ func Ep(class string, M int){
 			}
 			syR <- sy
 			sxR <- sx
-			
-			//for i:=0;j<NQ-1;j++{
-			//
-			//}
-			
 			qR <- qq 
-		
 		}(k)
-		}
+		
 		for i := 0; i<= np; i++{
 			sx <- sxR
 			sy <- syR
@@ -162,7 +156,7 @@ func Ep(class string, M int){
 	
 	} 
 	//End of parrallel programing
-	stop := t.Now()
+	stop := time.Now()
 	*t = stop.Sub(start)
 	
 	close(qR)
@@ -221,22 +215,6 @@ func Ep(class string, M int){
 	 }
 	
 	
-	r.C_print_results( "EP",
-		class,
-		"Random Numbers Generated",
-		nit,
-		verified,	
-		Mops,
-		&t,
-		runtime.NumCPU()
-		/*,goc string, 
-		golink string, 
-		go_lib string,
-		go_inc string,
-		goflags string,
-		golinkgoflags string,
-		rand string
-		*/	
-	)
+	r.C_print_results( "EP",class,"Random Numbers Generated",nit,verified,Mops,&t,runtime.NumCPU())
 		 
 }
