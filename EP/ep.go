@@ -27,6 +27,7 @@ import (
 	"os"
 	"math"
 	"time"
+	"runtime"
 )
 
 //Defining constants
@@ -161,7 +162,8 @@ func Ep(class string, M int){
 	
 	} 
 	//End of parrallel programing
-	stop := t.Now()	
+	stop := time.Now()
+	*t = stop.Sub(start)
 	
 	close(qR)
 	close(sxR)
@@ -205,7 +207,7 @@ func Ep(class string, M int){
 		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
 		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
 	}
-	Mops = math.Pow(2.0, float64(M+1))/t.Seconds/1000000.0	
+	Mops = math.Pow(2.0, float64(M+1))/ (*t.Seconds)/1000000.0	
 		
 	//Print of the results of the benchmark.
 	 fmt.Println("EP Benchmark Results:")
@@ -226,14 +228,15 @@ func Ep(class string, M int){
 		verified,	
 		Mops,
 		&t,
-		string(k),
-		goc string, 
+		runtime.NumCPU()
+		/*,goc string, 
 		golink string, 
 		go_lib string,
 		go_inc string,
 		goflags string,
 		golinkgoflags string,
 		rand string
+		*/	
 	)
 		 
 }
