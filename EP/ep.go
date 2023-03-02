@@ -31,8 +31,6 @@ import (
 
 //Defining constants
 const MK = int(16)
-const MM = M - MK
-const NN = 1 << MM
 const NK = 1 << MK
 const NQ = 10
 const EPSILON = 1.0e-8
@@ -40,7 +38,10 @@ const A = 1220703125.0
 const S = 271828183.0
 const NK_PLUS = ((2*NK)+1)
 
-func EP(){	
+func Ep(class string, M int){
+	const MM = M - MK
+	const NN = 1 << MM	
+	
 	var x = [NK_PLUS]float64{}
 	var q = [NQ]float64{}
 	var Mops, sx, sy ,an, gc, t1 float64
@@ -217,6 +218,7 @@ func EP(){
 	 	fmt.Printf("%v - %v\n", i, q[i])
 	 }
 	
+	
 	r.C_print_results( "EP",
 		class,
 		"Random Numbers Generated",
@@ -224,9 +226,6 @@ func EP(){
 		verified,	
 		Mops,
 		&t,
-		npbVersion string,
-		compileTime string,
-		compileVersion string,
 		string(k),
 		goc string, 
 		golink string, 

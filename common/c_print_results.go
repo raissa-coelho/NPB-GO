@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 	"math"
+	"runtime"
 )
 
 func C_print_results( name string,
@@ -13,11 +14,6 @@ func C_print_results( name string,
 	passed_verification bool,	
 	Mops float64,
 	t *time.Duration,
-	npbVersion string,
-	compileTime string,
-	compileVersion string,
-	//libVersion string,
-	totalThreads string,
 	totalThreads string,
 	goc string, 
 	golink string, 
@@ -31,7 +27,7 @@ func C_print_results( name string,
 	fmt.Println("class_npb =", class)
 	fmt.Println("Total threads =", totalThreads)
 	fmt.Println("Iterations =", niter)
-	fmt.Println("Time in seconds =", t)
+	fmt.Println("Time in seconds =", t.Seconds())
 	fmt.Priintln("Mop/s total =", Mops)
 	fmt.Println("Operation type =", opType)
 	
@@ -41,10 +37,7 @@ func C_print_results( name string,
 		fmt.Println("Verification = UNSUCCESSFUL")
 	}
 	
-	fmt.Println("Version =", npbVersion)
-	fmt.Println("Compile date =", compileTime)
-	fmt.Println("Compile ver =", compileVersion)
-	//fmt.Pririntln("OpenMP version =", libVersion)
+	fmt.Println("Compiler Version =", runtime.Version())
 	fmt.Println("Compile options:")
 	fmt.Println("GOC =", goc)
 	fmt.Println("GOLINK =", golink)

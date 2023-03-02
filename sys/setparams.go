@@ -5,10 +5,15 @@ import(
 	"fmt"
 	"os"
 	"time"
+	"runtime"
 	"log"
 )
 
 var benchmark_types [10]string = {SP, BT, LU, MG, FT, IS, EP, CG, UA, DC}
+
+func init(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+}
 
 func main(){
 	
@@ -142,5 +147,5 @@ func writeEP(f *os.File, class string ){
 		log.Fatal(err1)
 	}	
 	
-	ep.Ep(&f)
+	ep.Ep(class,M)
 }
