@@ -60,7 +60,7 @@ func get_info(args[] string, typeBench *int, classp *string){
 	}else if (args[1] == "DC" || args[1] == "dc") {
 	   *typeBench = 9
 	}else{
-		fmt.Println("setparams: Error: unknown benchmark type: " + args[1])
+		fmt.Println("setparams: Error: unknown benchmark type: ", args[1])
 		os.Exit(1)
 	}
 }
@@ -98,7 +98,7 @@ func write_info(typeB int, class string){
 }
 
 //EP benchmark information
-func writeEP(f *os.File, class string ){
+func writeEP(f *os.File, class string){
 	var M int
 	if class == "S"{
 	   M = 24
@@ -129,5 +129,5 @@ func writeEP(f *os.File, class string ){
 		log.Fatal(err1)
 	}	
 	
-	ep.Ep(class,M)
+	ep.Ep(M)
 }

@@ -44,7 +44,7 @@ type Results struct{
 	syy float64
 }
 
-func Ep(class string, M int){
+func Ep(M int){
 	var MM = M - MK
 	var NN = 1 << MM	
 	
@@ -214,6 +214,6 @@ func Ep(class string, M int){
 	 }
 	
 	
-	r.C_print_results( "EP",class,"Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
+	r.C_print_results( "EP","Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
 		 
 }

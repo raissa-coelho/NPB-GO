@@ -6,9 +6,9 @@ import (
 	"runtime"
 )
 
-func C_print_results(name string, class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads string){
-	fmt.Printf("Benchmark Completed = %v\n", name)
-	fmt.Printf("Class_npb =%v\n", class)
+func C_print_results(class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads string){
+	fmt.Printf("Benchmark Completed!\n")
+	fmt.Printf("Class NPB =%v\n", class)
 	fmt.Printf("Total threads =%v\n", totalThreads)
 	fmt.Printf("Iterations =%v\n", niter)
 	fmt.Printf("Time in seconds =%v\n", *t)
@@ -22,15 +22,7 @@ func C_print_results(name string, class string, opType string, niter int, passed
 	}
 	
 	fmt.Println("Compiler Version =", runtime.Version())
-	//fmt.Println("Compile options:")
-	//fmt.Println("GOC =", goc)
-	//fmt.Println("GOLINK =", golink)
-	//fmt.Println("GO_LIB =", go_lib)
-	//fmt.Println("GO_INC =", go_inc)
-	//fmt.Println("GOFLAGS =", goflags)
-	//fmt.Println("GOLINKFLAGS =", golinksflags)
-	//fmt.Println("RAND =", rand)
-	
+
 	/* 
 	 * fmt.Printf(" Please send the results of this run to:\n\n");
 	 * fmt.Printf(" NPB Development Team\n");
