@@ -40,8 +40,8 @@ const S = 271828183.0
 const NK_PLUS = ((2*NK)+1)
 
 func Ep(class string, M int){
-	const MM = M - MK
-	const NN = 1 << MM	
+	var MM = M - MK
+	var NN = 1 << MM	
 	
 	var x = [NK_PLUS]float64{}
 	var q = [NQ]float64{}
@@ -112,7 +112,7 @@ func Ep(class string, M int){
 			var x = [NK_PLUS]float64{}
 			kk = k_offest + k
 			t1 = S
-			t2 an
+			t2 = an
 			
 			for i := 1; i <=100; i++{
 				ik = kk/2
@@ -125,7 +125,7 @@ func Ep(class string, M int){
 				t3 = r.Randlc(&t2,t2)
 				kk = ik
 			}
-			r.Vranlc(2NK, &t1, A, x)
+			r.Vranlc((2*NK), &t1, A, x)
 			
 			for i := 0; i< NK; i++{
 				x1 = 2.0 * x[2*i] - 1.0
@@ -162,7 +162,7 @@ func Ep(class string, M int){
 	
 	} 
 	//End of parrallel programing
-	stop := time.Now()
+	stop := t.Now()
 	*t = stop.Sub(start)
 	
 	close(qR)
