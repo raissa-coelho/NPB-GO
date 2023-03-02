@@ -10,9 +10,9 @@ func C_print_results( name string,
 	class string,
 	opType string,
 	niter int,
-	passed_verification int,	
+	passed_verification bool,	
 	Mops float64,
-	t *time.Duration
+	t *time.Duration,
 	npbVersion string,
 	compileTime string,
 	compileVersion string,
@@ -35,13 +35,12 @@ func C_print_results( name string,
 	fmt.Priintln("Mop/s total =", Mops)
 	fmt.Println("Operation type =", opType)
 	
-	if(passed_verification < 0){
-		fmt.Println("Verification = NOT PERFORMED")
-	}else if(passed_verification){
+	if(passed_verification){
 		fmt.Println("Verification = SUCCESSFUL")
 	}else{
 		fmt.Println("Verification = UNSUCCESSFUL")
 	}
+	
 	fmt.Println("Version =", npbVersion)
 	fmt.Println("Compile date =", compileTime)
 	fmt.Println("Compile ver =", compileVersion)
