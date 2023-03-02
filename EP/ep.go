@@ -217,6 +217,24 @@ func EP(){
 	 	fmt.Printf("%v - %v\n", i, q[i])
 	 }
 	
-	r.C_print_results()
+	r.C_print_results( "EP",
+		class,
+		opType string,
+		0,
+		verified,	
+		Mops,
+		&t,
+		npbVersion string,
+		compileTime string,
+		compileVersion string,
+		totalThreads string,
+		goc string, 
+		golink string, 
+		go_lib string,
+		go_inc string,
+		goflags string,
+		golinkgoflags string,
+		rand string
+	)
 		 
 }
