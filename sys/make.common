@@ -23,31 +23,13 @@ COMMON=../common
 ${COMMON}/${RAND}.o: ${COMMON}/${RAND}.go ../config/make.def
 	cd ${COMMON}; ${GOCOMPILE} ${RAND}.go
 
-${COMMON}/print_results.o: ${COMMON}/print_results.go ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} print_results.go
-
 ${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go ../config/make.def
 	cd ${COMMON}; ${GOCOMPILE} c_print_results.go
-
-${COMMON}/timers.o: ${COMMON}/timers.go ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} timers.go
-
-${COMMON}/c_timers.o: ${COMMON}/c_timers.go ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} c_timers.go
-
-${COMMON}/wtime.o: ${COMMON}/${WTIME} ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} ${MACHINE} wtime.o ${COMMON}/${WTIME}
-# For most machines or CRAY or IBM
-#	cd ${COMMON}; ${GOCOMPILE} ${MACHINE} ${COMMON}/wtime.go
-
-${COMMON}/c_wtime.o: ${COMMON}/${WTIME} ../config/make.def
-	cd ${COMMON}; ${GOCOMPILE} c_wtime.o ${COMMON}/${WTIME}
-
 
 # Normally setparams updates npbparams.h only if the settings (CLASS)
 # have changed. However, we also want to update if the compile options
 # may have changed (set in ../config/make.def). 
-npbparams: ../config/make.def
+npbparams.txt: ../config/make.def
 	@ echo make.def modified. Rebuilding npbparams just in case
 	rm npbparams
 	../sys/setparams ${BENCHMARK} ${CLASS}
