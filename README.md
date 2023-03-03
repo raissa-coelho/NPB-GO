@@ -8,6 +8,7 @@ make init NPB-GO --> Use only if there isn't go.mod
 make <_benchmark_> CLASS=<_benchmark_type_>
 
 Benchmark = EP or ep
+
 Benchmark Type = S, W, A, B, C, D, E and F
 
 ## Contributors
