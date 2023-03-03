@@ -13,6 +13,10 @@ init:
 	go mod init NPB-GO
 	go mod tidy -v -x
 
+# Awk script courtesy cmg@cray.com, modified by Haoqiang Jin
+suite:
+	@ awk -f sys/suite.awk SMAKE=$(MAKE) $(SFILE) | $(SHELL)
+
 clean:
 	rm -f core
 
