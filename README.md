@@ -1,5 +1,5 @@
 # NPB-GO
-Implementation of the NASA Benchmarks in GO language for TECVII class.
+Implementation of the NAS Parallel Benchmarks in GO language for TECVII class.
 
 ## Compilation and Execution
 
@@ -26,3 +26,10 @@ make <_benchmark_> CLASS=<_benchmark_type_>
 |EP | <ul><li>Makefile</li><li>EP.go</li><li>npbparams.txt</li></ul> |
 |common | <ul><li>c_randdp.go</li><li>c_print_results.go.go</li></ul>  |
 |bin | vazio |
+
+## Notes on the implementation
+Implementation was based on:
+  -NPB3.4-OMP
+      NAS Parallel Benchmark Team
+  -NPB-CPP
+      Parallel Applications Modelling Group (GMAP) at PUCRS - Brazil.
