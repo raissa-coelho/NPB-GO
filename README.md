@@ -1,15 +1,15 @@
 # NPB-GO
 Implementation of the NASA Benchmarks in GO language for TECVII class.
 
-## How to compile and run
+## Compilation and Execution
 
 make init NPB-GO --> Use only if there isn't go.mod
 
 make <_benchmark_> CLASS=<_benchmark_type_>
 
-Benchmark = EP or ep
+<_benchmark_> = EP or ep
 
-Benchmark Type = S, W, A, B, C, D, E and F
+<_benchmark_type_> = S, W, A, B, C, D, E and F
 
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
