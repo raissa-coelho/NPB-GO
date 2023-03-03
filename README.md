@@ -3,6 +3,9 @@ Implementation of the NASA Benchmarks in GO language for TECVII class.
 
 ##How to compile and run
 
+make init NPB-GO --> Use only if there isn't go.mod
+
+make <benchmark> CLASS=<class>
 
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
