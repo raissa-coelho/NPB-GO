@@ -1,9 +1,12 @@
 # NPB-GO
-Implementation of the NAS Benchmark using GO language for TECVII. 
+Implementation of the NASA Benchmarks in GO language for TECVII class.
+
+##How to compile and run
+
 
 ## Contributors
-- Raissa Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
-- Bianca Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
+- Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
+- Bianca Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
 
 ## Benchmarks
 - EP
