@@ -24,6 +24,7 @@ package EP
 import (
 	r "NPB-GO/common"
 	"fmt"
+	"sync"
 	"math"
 	"time"
 	"runtime"
@@ -99,11 +100,18 @@ func Ep(M int){
 	var rr Results
 	result := make(chan Results,np) 
 	
+	//Syn
+	var wg sync.WaitGroup
+	
 	//Begining of parallel programing
 	k_offset = -1
 	start := time.Now()
+	wg.Add(np)
+	
 	for k := 1; k <= np; k++{
 		go func(k int){
+			defer wg.Done()
+			runtime.LockOSThread()
 			//Temporary varible
 			var SX, SY float64
 			var t1,t2,t3,t4,x1,x2 float64
@@ -146,22 +154,22 @@ func Ep(M int){
 			rrTemp.sxx = SX
 			rrTemp.qqR = qq
 			result <- rrTemp
+			runtime.UnlockOSThread()
 		}(k)
-		
-		for i := 0; i<= np; i++{
-			rr = <-result
-			sx = rr.sxx
-			sy = rr.syy
-			q = rr.qqR
-		
-		}
-	
 	} 
+	for i := 1; i<= np; i++{
+		rr = <-result
+		sx = sx + rr.sxx
+		sy = sy + rr.syy
+		for j := range q{
+			q[j] = q[j] + rr.qqR[j]
+		}
+	}
 	//End of parrallel programing
 	stop := time.Now()
 	t = stop.Sub(start)
-	
 	close(result)
+	wg.Wait()
 	
 	for i := 0; i < NQ-1; i ++{
 		gc = gc + q[i]
@@ -196,11 +204,12 @@ func Ep(M int){
 		verified = false
 	}
 	
-	if verified == true {
+	if verified {
 		sx_err = math.Abs((sx - sx_verify_value) / sx_verify_value)
 		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
 		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
 	}
+	
 	Mops = math.Pow(2.0, float64(M+1))/(t.Seconds())/1000000.0	
 		
 	//Print of the results of the benchmark.
@@ -214,6 +223,6 @@ func Ep(M int){
 	 }
 	
 	
-	r.C_print_results( "EP","Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
+	r.C_print_results( " EP"," Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
 		 
 }

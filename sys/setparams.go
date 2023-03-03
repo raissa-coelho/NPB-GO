@@ -3,6 +3,7 @@ package main
 import(
 	ep "NPB-GO/EP"
 	"fmt"
+	"strconv"
 	"os"
 	"runtime"
 	"log"
@@ -26,7 +27,7 @@ func main(){
 	//Verify if arguments are right
 	get_info(args,&typeBench,&class)
 	if class != "U"{
-		fmt.Println("setparams: For benchmark ",args[1],"class = ",class)
+		fmt.Println("setparams: For benchmark",args[1],"class= ",class)
 		check_info(typeBench,class)
 	}
 
@@ -123,8 +124,11 @@ func writeEP(f *os.File, class string){
 	if err1 != nil{
 		log.Fatal(err1)
 	}
-	
-	_,err2 := f.WriteString(string(M))
+	_, err3 := f.WriteString("\n")
+	if err3 != nil{
+		log.Fatal(err3)
+	}
+	_,err2 := f.WriteString(strconv.Itoa(M))
 	if err2 != nil{
 		log.Fatal(err1)
 	}	
