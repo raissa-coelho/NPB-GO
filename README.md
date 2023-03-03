@@ -1,5 +1,5 @@
 # NPB-GO
-Implementation of the NAS Benchmark using GO language. 
+Implementation of the NAS Benchmark using GO language for TECVII. 
 
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering, Universidade Federal de Pelotas(UFPEL)
