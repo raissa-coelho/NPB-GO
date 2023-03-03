@@ -11,9 +11,13 @@ ep: header
 
 init: 
 	go mod init NPB-GO
+	go mod tidy -v -x
+
+clean:
+	rm -f core
 
 cleanall:
-	go clean	
+	go clean *	
 	rm bin/*
 
 header:
