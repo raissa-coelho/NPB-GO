@@ -227,6 +227,7 @@ func Ep(M int){
 	 }
 	
 	
+	
 	r.C_print_results( " EP"," Random Numbers Generated",nit,verified,Mops,&t,runtime.NumCPU())
 		 
 }

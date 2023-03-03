@@ -11,6 +11,7 @@ CLASS=U
 # target does not exist and is not created. 
 # If you create a file called "config" you will break things. 
 config:
+	@cd ../sys; ${MAKE} all
 	../sys/setparams ${BENCHMARK} ${CLASS}
 
 COMMON=../common

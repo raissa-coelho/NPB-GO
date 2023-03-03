@@ -3,7 +3,7 @@ Implementation of the NAS Parallel Benchmark in GO language for TECVII class.
 
 ## Compilation and Execution
 
-make init NPB-GO --> Use only if there isn't go.mod
+make init --> Use only if there isn't go.mod
 
 make <_benchmark_> CLASS=<_benchmark_type_>
 
