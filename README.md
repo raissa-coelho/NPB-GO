@@ -1,11 +1,13 @@
 # NPB-GO
 Implementation of the NASA Benchmarks in GO language for TECVII class.
 
-##How to compile and run
+## How to compile and run
 
 make init NPB-GO --> Use only if there isn't go.mod
 
-make <benchmark> CLASS=<class>
+make <_benchmark_> CLASS=<_class_>
+
+Classes = S, W, A, B, C, D, E and F
 
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
@@ -18,7 +20,7 @@ make <benchmark> CLASS=<class>
 |Directory |Files |
 | :---|---:|
 |config | make.def|
-|sys | <ul><li>make.common</li><li>Makefile</li><li>print_header</li><li>print_instructions</li><li>setparams.go</li></ul>|
-|EP | <ul><li>Makefile</li><li>ep.go</li></ul> |
-|common | utilitários |
+|sys | <ul><li>make.common</li><li>Makefile</li><li>print_header</li><li>print_instructions</li><li>setparams.go</li><li>npbparams.txt</li></ul>|
+|EP | <ul><li>Makefile</li><li>EP.go</li><li>npbparams.txt</li></ul> |
+|common | <ul><li>c_randdp.go</li><li>c_print_results.go.go</li></ul>  |
 |bin | vazio |
