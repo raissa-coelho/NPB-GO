@@ -29,7 +29,11 @@ make <_benchmark_> CLASS=<_benchmark_type_>
 
 ## Notes on the implementation
 Implementation was based on:
+
   -NPB3.4-OMP
+      
       NAS Parallel Benchmark Team
+  
   -NPB-CPP
+  
       Parallel Applications Modelling Group (GMAP) at PUCRS - Brazil.
