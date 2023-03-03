@@ -1,5 +1,5 @@
 # NPB-GO
-Implementation of the NAS Parallel Benchmarks in GO language for TECVII class.
+Implementation of the NAS Parallel Benchmark in GO language for TECVII class.
 
 ## Compilation and Execution
 
