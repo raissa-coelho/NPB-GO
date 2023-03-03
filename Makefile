@@ -16,10 +16,6 @@ init:
 clean:
 	rm -f core
 
-cleanall:
-	go clean *	
-	rm bin/*
-
 header:
 	@ $(SHELL) sys/print_header
 
