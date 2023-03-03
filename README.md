@@ -9,7 +9,7 @@ make <_benchmark_> CLASS=<_benchmark_type_>
 
 <_benchmark_> = EP or ep
 
-<_benchmark_type_> = S, W, A, B, C, D, E and F
+<_benchmark_type_> = S, W, A, B, C, D, E or F
 
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
