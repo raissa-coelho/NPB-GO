@@ -11,13 +11,21 @@ make <_benchmark_> CLASS=<_benchmark_type_>
 
 <_benchmark_type_> = S, W, A, B, C, D, E or F
 
+<<<<<<< HEAD
 ---------------------------------------------
+=======
+--------------------------------------
+>>>>>>> c9d37aada60d3d65da6a37fbe6f300c6e68a328a
 
 suite.def contains a list of benchmarks and benchmark types to be used as parameters in the command line.
 
 To compile and run multiple tests:
 
 make suite
+<<<<<<< HEAD
+=======
+
+>>>>>>> c9d37aada60d3d65da6a37fbe6f300c6e68a328a
 ## Contributors
 - Raissa Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
 - Bianca Nunes Coelho, Computer engineering (student), Universidade Federal de Pelotas(UFPEL)
