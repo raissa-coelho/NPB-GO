@@ -1,5 +1,3 @@
-PROGRAM  = $(BINDIR)/$(BENCHMARK)$(VEXT).$(CLASS).x
-
 # Class "U" is used internally by the setparams program to mean
 # "unknown". This means that if you don't specify CLASS=
 # on the command line, you'll get an error. It would be nice
@@ -7,15 +5,12 @@ PROGRAM  = $(BINDIR)/$(BENCHMARK)$(VEXT).$(CLASS).x
 # from the setparams back to the make program, which isn't easy. 
 CLASS=U
 
-default:: ${PROGRAM}
-
 # This makes sure the configuration utility setparams 
 # is up to date. 
 # Note that this must be run every time, which is why the
 # target does not exist and is not created. 
 # If you create a file called "config" you will break things. 
 config:
-	@cd ../sys; ${MAKE} all
 	../sys/setparams ${BENCHMARK} ${CLASS}
 
 COMMON=../common
@@ -25,12 +20,12 @@ ${COMMON}/c_randdp.o: ${COMMON}/c_randdp.go
 ${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go
 	cd ${COMMON}; $(UGO) build -o c_print_results c_print_results.go
 
-# Normally setparams updates npbparams.h only if the settings (CLASS)
+# Normally setparams updates npbparams.txt only if the settings (CLASS)
 # have changed. However, we also want to update if the compile options
 # may have changed (set in ../config/make.def). 
 npbparams.txt: ../config/make.def
 	@ echo make.def modified. Rebuilding npbparams just in case
-	rm npbparams
+	rm npbparams.txt
 	../sys/setparams ${BENCHMARK} ${CLASS}
 
 # So that "make benchmark-name" works
