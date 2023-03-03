@@ -31,7 +31,7 @@ import (
 )
 
 //Defining constants
-const MK = int(16)
+const MK = 16
 const NK = 1 << MK
 const NQ = 10
 const EPSILON = 1.0e-8
@@ -77,12 +77,12 @@ func Ep(M int){
 	for i := 0; i < NK_PLUS; i++{
 		x[i] = -1.0e99
 	}
-	Mops = math.Log(math.Sqrt(math.Max(1.0,1.0)))
+	Mops = math.Log(math.Sqrt(math.Abs(math.Max(1.0,1.0))))
 
 	t1 = A
 	r.Vrandlc(0,&t1,A,x[:])
 	
-	for i := 0; i < MK-1; i++{
+	for i := 0; i < MK+1; i++{
 		r.Randlc(&t1,t1)
 	}
 	
@@ -111,7 +111,6 @@ func Ep(M int){
 	for k := 1; k <= np; k++{
 		go func(k int){
 			defer wg.Done()
-			runtime.LockOSThread()
 			//Temporary varible
 			var SX, SY float64
 			var t1,t2,t3,t4,x1,x2 float64
@@ -123,7 +122,13 @@ func Ep(M int){
 			t1 = S
 			t2 = an
 			
-			for i:=1; i <=100; i++{
+			for i:=0;i<NQ-1;i++{
+				qq[i] = 0.0
+			}
+			SX = 0.0
+			SY = 0.0
+			
+			for i:=0; i <=100; i++{
 				ik = kk/2
 				if ((2*ik) != kk){
 					t3 = r.Randlc(&t1,t2)
@@ -141,28 +146,27 @@ func Ep(M int){
 				x2 = 2.0 * x[2*i+1] - 1.0
 				t1 = math.Pow(x1,2) + math.Pow(x2,2)
 				if (t1 <= 1.0){
-					t2 = math.Sqrt((-2.0) * math.Log(t1) / t1)
+					t2 = math.Sqrt(-2.0 * math.Log(t1) / t1)
 					t3 = (x1 * t2)
 					t4 = (x2 * t2)
 					l = int(math.Max(math.Abs(t3), math.Abs(t4)))
 					qq[l] += 1.0
-					SX = SX + t3
-					SY = SY + t4
+					SX += t3
+					SY += t4
 				}
 			}
+			rrTemp.qqR = qq
 			rrTemp.syy = SY
 			rrTemp.sxx = SX
-			rrTemp.qqR = qq
 			result <- rrTemp
-			runtime.UnlockOSThread()
 		}(k)
 	} 
 	for i := 1; i<= np; i++{
 		rr = <-result
-		sx = sx + rr.sxx
-		sy = sy + rr.syy
+		sx += rr.sxx
+		sy += rr.syy
 		for j := range q{
-			q[j] = q[j] + rr.qqR[j]
+			q[j] += rr.qqR[j]
 		}
 	}
 	//End of parrallel programing
@@ -203,11 +207,11 @@ func Ep(M int){
 	}else {
 		verified = false
 	}
-	
+
 	if verified {
 		sx_err = math.Abs((sx - sx_verify_value) / sx_verify_value)
 		sy_err = math.Abs((sy - sy_verify_value) / sy_verify_value)
-		verified = (sx_err <= EPSILON) && (sy_err <= EPSILON)
+		verified = ((sx_err <= EPSILON) && (sy_err <= EPSILON))
 	}
 	
 	Mops = math.Pow(2.0, float64(M+1))/(t.Seconds())/1000000.0	
@@ -223,6 +227,6 @@ func Ep(M int){
 	 }
 	
 	
-	r.C_print_results( " EP"," Random Numbers Generated",nit,verified,Mops,&t,string(runtime.NumCPU()))
+	r.C_print_results( " EP"," Random Numbers Generated",nit,verified,Mops,&t,runtime.NumCPU())
 		 
 }

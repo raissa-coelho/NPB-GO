@@ -6,13 +6,13 @@ import (
 	"runtime"
 )
 
-func C_print_results(class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads string){
+func C_print_results(class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads int){
 	fmt.Printf("Benchmark Completed!\n")
 	fmt.Printf("Class NPB =%v\n", class)
-	fmt.Printf("Total threads =%v\n", totalThreads)
-	fmt.Printf("Iterations =%v\n", niter)
-	fmt.Printf("Time in seconds =%v\n", *t)
-	fmt.Printf("Mops total =%v\n", Mops)
+	fmt.Printf("Total threads = %v\n", totalThreads)
+	fmt.Printf("Iterations = %v\n", niter)
+	fmt.Printf("Time = %v\n", *t)
+	fmt.Printf("Mop/s total = %v\n", Mops)
 	fmt.Printf("Operation type =%v\n", opType)
 	
 	if(passed_verification){

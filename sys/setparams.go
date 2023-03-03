@@ -103,7 +103,7 @@ func writeEP(f *os.File, class string){
 	var M int
 	if class == "S"{
 	   M = 24
-	}else if class == "w" {
+	}else if class == "W" {
 		M = 25
 	}else if class == "A" {
 		M = 28
