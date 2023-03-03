@@ -15,7 +15,7 @@
 // 	Júnior Löff <loffjh@gmail.com>
 //------------------------------------------------------------------------------
 
-//GO Language Version - EP Benchmark - TECVIII
+//GO Language Version - EP Benchmark - TECVII
 // Bianca Nunes Cooelho
 // Raíssa Nunes coelho
 
