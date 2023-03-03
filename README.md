@@ -8,13 +8,6 @@ Implementation of the NAS Benchmark using GO language for TECVII.
 ## Benchmarks
 - EP
 
-## Files
-- config
-- sys
-- EP
-- common
-- bin
-
 ## Content
 |Directory |Files |
 | :---|---:|
