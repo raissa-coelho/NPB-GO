@@ -1,5 +1,3 @@
 # Pasta config
 
-Contém o arquivo make.def
-
-TODO
+make.def file can be changed.
