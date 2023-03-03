@@ -1,5 +1,4 @@
 PROGRAM  = $(BINDIR)/$(BENCHMARK)$(VEXT).$(CLASS).x
-GOCOMPILE = $(GCCGO) build $(GO_INC) $(GOFLAGS)
 
 # Class "U" is used internally by the setparams program to mean
 # "unknown". This means that if you don't specify CLASS=
@@ -21,10 +20,10 @@ config:
 
 COMMON=../common
 ${COMMON}/c_randdp.o: ${COMMON}/c_randdp.go
-	cd ${COMMON}; ${GOCOMPILE} c_randdp.go
+	cd ${COMMON}; $(UGO) build -o c_randdp c_randdp.go
 
 ${COMMON}/c_print_results.o: ${COMMON}/c_print_results.go
-	cd ${COMMON}; ${GOCOMPILE} c_print_results.go
+	cd ${COMMON}; $(UGO) build -o c_print_results c_print_results.go
 
 # Normally setparams updates npbparams.h only if the settings (CLASS)
 # have changed. However, we also want to update if the compile options
