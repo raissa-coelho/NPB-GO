@@ -1,1 +1,1 @@
-# Pasta common
+# common directory
