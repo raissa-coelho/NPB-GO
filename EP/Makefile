@@ -12,7 +12,7 @@ ${PROGRAM}: config ${OBJS}
 	${GOLINK} ${GOLINKFLAGS} ${PROGRAM} ${OBJS} ${GO_LIB}
 
 EP.o:	EP.go
-	${GOCOMPILE} EP.go
+	$(UGO) build -o EP EP.go
 
 clean:		
 	go clean
