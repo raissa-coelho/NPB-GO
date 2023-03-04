@@ -11,7 +11,6 @@ ep: header
 
 init: 
 	go mod init NPB-GO
-	go mod tidy
 
 # Awk script courtesy cmg@cray.com, modified by Haoqiang Jin
 suite:
