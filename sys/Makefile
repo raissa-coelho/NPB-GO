@@ -16,4 +16,4 @@ setparams: setparams.go ../config/make.def
 
 clean: 
 	$(UGO) clean
-	rm -f *~ *.o
+	rm -f *.o
