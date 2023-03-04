@@ -15,5 +15,5 @@ EP.o:	EP.go
 	$(UGO) build -o EP EP.go
 
 clean:		
-	go clean
-	rm 
+	$(UGO) clean
+	rm -f *.o *~
