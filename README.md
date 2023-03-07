@@ -33,7 +33,7 @@ make suite
 |sys | <ul><li>make.common</li><li>Makefile</li><li>print_header</li><li>print_instructions</li><li>setparams.go</li><li>npbparams.txt</li></ul>|
 |EP | <ul><li>Makefile</li><li>EP.go</li><li>npbparams.txt</li></ul> |
 |common | <ul><li>c_randdp.go</li><li>c_print_results.go.go</li><li>c_file.go</li></ul>  |
-|bin | vazio |
+|bin | .txt files |
 
 ## Notes on the implementation
 Implementation was based on:
