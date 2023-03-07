@@ -5,15 +5,15 @@ Implementation of the NAS Parallel Benchmark in GO language for TECVII class.
 
 make init --> Use only if there isn't go.mod
 
-make <_benchmark_> CLASS=<_benchmark_type_>
+make <_benchmark_> CLASS=<_benchmark_class_>
 
 <_benchmark_> = EP or ep
 
-<_benchmark_type_> = S, W, A, B, C, D, E or F
+<_benchmark_class_> = S, W, A, B, C, D, E or F
 
 ---------------------------------------------
 
-suite.def contains a list of benchmarks and benchmark types to be used as parameters in the command line.
+suite.def contains a list of benchmarks and benchmark classes to be used as parameters in the command line.
 
 To compile and run multiple tests:
 
