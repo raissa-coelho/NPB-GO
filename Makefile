@@ -5,6 +5,10 @@ SFILE=config/suite.def
 default: header
 	@ $(SHELL) sys/print_instructions
 
+IS: is
+is: header
+	cd IS; $(MAKE) CLASS=$(CLASS)
+	
 EP: ep
 ep: header
 	cd EP; $(MAKE) CLASS=$(CLASS)
