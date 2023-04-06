@@ -89,6 +89,8 @@ func write_info(typeB int, class string){
 	
 	switch typeB {
 	
+	//IS
+	case 5: writeIS(file, class)
 	//EP
 	case 6: writeEP(file, class)	   
 	
@@ -96,6 +98,16 @@ func write_info(typeB int, class string){
 		 file.Close()
 		 os.Exit(1)
 	}		
+}
+
+// IS Benchmark information
+func writeIS(f *os.File, class string) {
+	if class != "S" && class != "W" && class != "A" && class != "B" && class != "C" && class != "D" && class != "E" {
+		fmt.Println("setparams: Internal error: invalid class")
+		os.Exit(1)
+	}
+
+	is.IS(class)
 }
 
 //EP benchmark information
