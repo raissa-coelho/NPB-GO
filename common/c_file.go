@@ -65,3 +65,46 @@ func C_file(bench string, M int, gc, sx, sy float64, NQ int, q []float64, rng st
 
 	defer f.Close()
 }
+
+func C_file_IS(passed bool, bench, class string, TOTAL_KEYS, MAX_ITERATIONS int, Mops float64, t *time.Duration) {
+	var aux string
+	if runtime.GOOS == "windows" {
+		aux = "..\\bin\\"
+	} else {
+		aux = "../bin/"
+	}
+
+	f, err := os.Create(aux + bench + "_" + class + ".txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	f.WriteString("NAS Parallel Benchmark Parallel GO version - IS Benchmark\n")
+	f.WriteString("Class: " + class + "\n")
+	f.WriteString("Size: " + strconv.Itoa(TOTAL_KEYS) + "\n")
+	f.WriteString("Iterations: " + strconv.Itoa(MAX_ITERATIONS) + "\n")
+	f.WriteString("Number of available goroutines: " + strconv.Itoa(runtime.NumCPU()) + "\n")
+	if strings.Compare("S", class) != 0 {
+		f.WriteString("\n\n     iteration    \n")
+		for i := 0; i < MAX_ITERATIONS; i++ {
+			f.WriteString("\n\n     " + strconv.Itoa(i+1))
+		}
+	}
+	f.WriteString("\n\n")
+	f.WriteString("Benchmark Completed!\n")
+	f.WriteString("Class = " + class + "\n")
+	f.WriteString("Size = " + strconv.Itoa(TOTAL_KEYS) + "\n")
+	f.WriteString("Iterations = " + strconv.Itoa(MAX_ITERATIONS) + "\n")
+	f.WriteString("Time in seconds = " + fmt.Sprint(*t) + "\n")
+	f.WriteString("Total goroutines = " + strconv.Itoa(runtime.NumCPU()) + "\n")
+	f.WriteString("Mop/s Total = " + fmt.Sprint(Mops) + "\n")
+	Mops_pt := Mops / float64(runtime.NumCPU())
+	f.WriteString("Mop/s/goroutine  = " + fmt.Sprint(Mops_pt) + "\n")
+	f.WriteString("Operation type = keys ranked\n")
+	if passed {
+		f.WriteString("Verification = SUCCESSFUL\n")
+	} else {
+		f.WriteString("Verification = UNSUCCESSFUL\n")
+	}
+	f.WriteString("Compiler Version = " + fmt.Sprint(runtime.Version()))
+}
