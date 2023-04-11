@@ -21,7 +21,7 @@ var (
 	partial_verify_vals [TEST_ARRAY_SIZE]int
 	test_index_array    [TEST_ARRAY_SIZE]int
 	test_rank_array     [TEST_ARRAY_SIZE]int
-	procs               int = runtime.NumCPU()
+	procs               int
 )
 
 const (
@@ -72,6 +72,7 @@ func IS(class string) {
 	key_array := make([]int, NUM_KEYS)
 	key_buff1 := make([]int, MAX_KEY)
 	key_buff2 := make([]int, NUM_KEYS)
+	procs = runtime.NumCPU()
 
 	S_test_index_array := [TEST_ARRAY_SIZE]int{48427, 17148, 23627, 62548, 4431}
 	S_test_rank_array := [TEST_ARRAY_SIZE]int{0, 18, 346, 64917, 65463}
@@ -143,7 +144,7 @@ func IS(class string) {
 
 	semm := semaphore.NewWeighted(int64(procs))
 	semm.Acquire(context.Background(), 1)
-	go create_seq(314159265.00, 1220703125.00, myid, NUM_KEYS, MAX_KEY, ch_CreatSEQ)
+	go create_seq(314159265.00, 1220703125.00, myid, NUM_KEYS, MAX_KEY, procs, ch_CreatSEQ)
 	key_array = <-ch_CreatSEQ
 	semm.Release(1)
 
@@ -181,23 +182,29 @@ func IS(class string) {
 	//wg.Wait()
 
 	// This tests that keys are in sequence
-	full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS, key_buff1, key_buff2, key_array[:], bucket_ptrs, key_buff_ptr_global[:])
-
+	 temp01 := full_verify(myid,procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS, key_buff1, key_buff2, key_array[:], bucket_ptrs, key_buff_ptr_global[:])
+	
+	passed_verification += temp01
+	fmt.Printf("Passed verification: %d\n", passed_verification)
+	fmt.Printf("vvv: %d\n", ((5*MAX_ITERATIONS)+1))
+	
 	var aux bool = true
-	if passed_verification != 5*MAX_ITERATIONS+1 {
+	if passed_verification != ((5*MAX_ITERATIONS)+1) {
 		passed_verification = 0
 		aux = false
 	}
-
+	
+	fmt.Printf("Passed verification: %d\n", passed_verification)
+	
 	Mops := float64((MAX_ITERATIONS * TOTAL_KEYS)) / t.Seconds() / 1000000.0
 
 	r.C_file_IS(aux, "IS", class, TOTAL_KEYS, MAX_ITERATIONS, Mops, &t)
 	r.C_print_results(class, "Keys Ranked", MAX_ITERATIONS, aux, Mops, &t, runtime.NumCPU())
 }
 
-func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY int, ch chan []int) {
-	var x, s, k float64
-	var mq, k1, k2 int
+func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY, procs int, ch chan []int) {
+	var x, s float64
+	var mq, k1, k2, k int
 	var an float64 = a
 
 	key_array := make([]int, NUM_KEYS)
@@ -210,29 +217,29 @@ func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY int, ch chan []int) {
 		k2 = NUM_KEYS
 	}
 
-	s = find_my_seed(myid, procs, 4*NUM_KEYS, seed, an)
+	s = find_my_seed(myid, procs, int64(4*NUM_KEYS), seed, an)
 
-	k = float64(MAX_KEY / 4)
+	k = MAX_KEY / 4
 
 	for i := k1; i < k2; i++ {
 		x = r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
-		key_array[i] = int(k * x)
+		key_array[i] = k * int(x)
 	}
 	ch <- key_array
 }
 
-func find_my_seed(kn, np, nn int, s, a float64) float64 {
+func find_my_seed(kn, np int, nn int64, s, a float64) float64 {
 	var t1, t2 float64
-	var mq, nq, kk, ik int
+	var mq, nq, kk, ik int64
 
 	if kn == 0 {
 		return s
 	}
-	mq = (nn/4 + np - 1) / np
-	nq = mq * 4 * kn
+	mq = (nn/4 + int64(np) - 1) / int64(np)
+	nq = mq * 4 * int64(kn)
 	t1 = s
 	t2 = a
 	kk = nq
@@ -280,7 +287,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 	}
 
 	key_array[iteration] = iteration
-	key_array[iteration+MAX_ITERATIONS] = MAX_KEY - iteration - 1
+	key_array[iteration+MAX_ITERATIONS] = MAX_KEY - iteration
 
 	for i := 0; i < TEST_ARRAY_SIZE; i++ {
 		partial_verify_vals[i] = key_array[test_index_array[i]]
@@ -312,7 +319,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 
 		for i := 1; i < NUM_BUCKETS; i++ {
 			bucket_ptrs[i] = bucket_ptrs[i-1]
-			for k := 0; i < NUM_KEYS; i++ {
+			for k := 0; k < NUM_KEYS; k++ {
 				bucket_ptrs[i] += bucket_size[k][i]
 			}
 			for k := myid; k < procs; k++ {
@@ -343,7 +350,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 
 			var m int
 			if i > 0 {
-				m = bucket_ptrs[i]
+				m = bucket_ptrs[i-1]
 			} else {
 				m = 0
 			}
@@ -428,8 +435,21 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 				} else {
 					test_rank -= iteration
 				}
+			case "E":
+				if i < 2 {
+					test_rank += iteration - 2
+				}else if i == 2{
+					test_rank += iteration - 2
+					if iteration > 4{
+						test_rank -= 2
+					}else if iteration > 2 {
+						test_rank -= 1
+					}
+				}else{
+					test_rank -= iteration - 2
+				}
 			}
-
+			
 			if key_rank != test_rank {
 				failed = 1
 			} else {
@@ -439,9 +459,8 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 			if failed == 1 {
 				fmt.Printf("Failed partial verification: \n")
 				fmt.Printf("iteration %d, test key %d\n", iteration, i)
-			} else {
-				fmt.Println("Success ;)")
 			}
+
 		}
 	}
 
@@ -454,7 +473,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 	ch <- t
 }
 
-func full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int, key_array []int, bucket_ptrs, key_buff_ptr_global []int) {
+func full_verify(myid,num_procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int, key_array []int, bucket_ptrs, key_buff_ptr_global []int) int {
 	var k, k1, k2, j int
 	//var myid, num_procs int
 
@@ -470,7 +489,7 @@ func full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int,
 			}
 			for j := k1; j < bucket_ptrs[i]; j++ {
 				k = key_buff_ptr_global[key_buff2[j]] - 1
-				key_array[k] = key_buff2[i]
+				key_array[k] = key_buff2[j]
 			}
 		}
 	} else {
@@ -479,13 +498,13 @@ func full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int,
 			key_buff2[i] = key_array[i]
 		}
 
-		//j = num_procs
-		//j = (MAX_KEY + j - 1) / j
-		//k1 = j * myid
-		//k2 = k1 + j
+		j = num_procs
+		j = (MAX_KEY + j - 1) / j
+		k1 = j * myid
 
-		j = MAX_KEY
-		k1 = 0
+		//j = MAX_KEY
+		//k1 = 0
+		
 		k2 = k1 + j
 
 		if k2 > MAX_KEY {
@@ -494,8 +513,7 @@ func full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int,
 
 		for i := 0; i < NUM_KEYS; i++ {
 			if key_buff2[i] >= k1 && key_buff2[i] < k2 {
-				//k = key_buff_ptr_global[key_buff2[i]] - 1
-				k = key_buff_ptr_global[key_buff2[i]]
+				k = key_buff_ptr_global[key_buff2[i]] - 1
 				key_array[k] = key_buff2[i]
 			}
 		}
@@ -514,4 +532,5 @@ func full_verify(NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int,
 	} else {
 		passed_verification++
 	}
+	return passed_verification
 }
