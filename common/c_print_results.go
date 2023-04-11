@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func C_print_results(class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads int){
+func C_print_results(class string, opType string, niter int, passed_verification bool, Mops float64, t *time.Duration, totalThreads int) {
 	fmt.Printf("Benchmark Completed!\n")
 	fmt.Printf("Class NPB =%v\n", class)
 	fmt.Printf("Total threads = %v\n", totalThreads)
