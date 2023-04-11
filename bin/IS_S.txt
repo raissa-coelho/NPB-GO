@@ -1,0 +1,41 @@
+NAS Parallel Benchmark Parallel GO version - IS Benchmark
+Class: S
+Size: 65536
+Iterations: 10
+Number of available goroutines: 8
+
+
+     iteration    
+
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+     10
+
+Benchmark Completed!
+Class = S
+Size = 65536
+Iterations = 10
+Time in seconds = 1.0326ms
+Total goroutines = 8
+Mop/s Total = 634.6697656401317
+Mop/s/goroutine  = 79.33372070501646
+Operation type = keys ranked
+Verification = UNSUCCESSFUL
+Compiler Version = go1.19.5

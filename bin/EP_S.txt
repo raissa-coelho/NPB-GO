@@ -1,0 +1,23 @@
+Benchmark :EP
+N = 24
+No. Gaussian Pairs = 1.3176389e+07
+Sums = -3247.834652034614  -6958.407078382826
+Counts: 
+0 - 6.140517e+06
+1 - 5.8653e+06
+2 - 1.100361e+06
+3 - 68546
+4 - 1648
+5 - 17
+6 - 0
+7 - 0
+8 - 0
+Benchmark Completed!
+Class = S
+Total threads = 8
+Iterations = 0
+Time = 439.13ms
+Mop/s total = 76.41115842688953
+Operation type =  Random Numbers Generated
+Verification = SUCCESSFUL
+Compiler Version = go1.19.5
