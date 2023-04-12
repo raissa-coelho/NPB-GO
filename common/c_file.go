@@ -107,6 +107,7 @@ func C_file_IS(passed bool, bench, class string, TOTAL_KEYS, MAX_ITERATIONS int,
 		for i := 0; i < MAX_ITERATIONS; i++ {
 			f.WriteString("\n\n     " + strconv.Itoa(i+1))
 		}
+
 	}
 	f.WriteString("\n\n")
 	f.WriteString("Benchmark Completed!\n")
