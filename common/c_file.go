@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -101,9 +102,11 @@ func C_file_IS(passed bool, bench, class string, TOTAL_KEYS, MAX_ITERATIONS int,
 	f.WriteString("Size: " + strconv.Itoa(TOTAL_KEYS) + "\n")
 	f.WriteString("Iterations: " + strconv.Itoa(MAX_ITERATIONS) + "\n")
 	f.WriteString("Number of available goroutines: " + strconv.Itoa(runtime.NumCPU()) + "\n")
-	f.WriteString("\n\n     iteration    \n")
-	for i := 0; i < MAX_ITERATIONS; i++ {
-		f.WriteString("\n\n     " + strconv.Itoa(MAX_ITERATIONS))
+	if strings.Compare(class, "S") != 0 {
+		f.WriteString("\n\n     iteration    \n")
+		for i := 0; i < MAX_ITERATIONS; i++ {
+			f.WriteString("\n\n     " + strconv.Itoa(i+1))
+		}
 	}
 	f.WriteString("\n\n")
 	f.WriteString("Benchmark Completed!\n")
