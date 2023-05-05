@@ -9,25 +9,25 @@ import (
 )
 
 var (
-	TOTAL_KEYS_LOG_2    int
-	MAX_KEY_LOG_2       int
-	NUM_BUCKETS_LOG     int
-	TOTAL_KEYS          int
-	USE_BUCKETS         bool = false
+	TOTAL_KEYS_LOG_2    int64
+	MAX_KEY_LOG_2       int64
+	NUM_BUCKETS_LOG     int64
+	TOTAL_KEYS          int64
+	USE_BUCKETS         bool
 	passed_verification int
-	partial_verify_vals [TEST_ARRAY_SIZE]int
-	test_index_array    [TEST_ARRAY_SIZE]int
-	test_rank_array     [TEST_ARRAY_SIZE]int
+	partial_verify_vals [TEST_ARRAY_SIZE]int64
+	test_index_array    [TEST_ARRAY_SIZE]int64
+	test_rank_array     [TEST_ARRAY_SIZE]int64
 	procs               int
-	key_array           []int
-	key_buff1 	    []int
-	key_buff2 	    []int
-	key_buff1_aptr      [][]int
-	bucket_size         [][]int
-	key_buff_ptr_global []int
-	bucket_ptrs 	    []int
-	MAX_KEY     	    int 
-	NUM_BUCKETS         int 
+	key_array           []int64
+	key_buff1 	    []int64
+	key_buff2 	    []int64
+	key_buff1_aptr      [][]int64
+	bucket_size         [][]int64
+	key_buff_ptr_global []int64
+	bucket_ptrs 	    []int64
+	MAX_KEY     	    int
+	NUM_BUCKETS         int
 	NUM_KEYS            int
 	classNPB            string
 )
@@ -40,6 +40,7 @@ const (
 func IS(class string) {
 	
 	classNPB = class
+	USE_BUCKETS = false
 	
 	if class == "S" {
 		TOTAL_KEYS_LOG_2 = 16
@@ -68,37 +69,37 @@ func IS(class string) {
 	}
 
 	if class == "D" {
-		TOTAL_KEYS = 1 << TOTAL_KEYS_LOG_2
+		TOTAL_KEYS = int64(1) << TOTAL_KEYS_LOG_2
 	} else {
 		TOTAL_KEYS = 1 << TOTAL_KEYS_LOG_2
 	}
 
 	MAX_KEY     = 1 << MAX_KEY_LOG_2
 	NUM_BUCKETS = 1 << NUM_BUCKETS_LOG
-	NUM_KEYS    = TOTAL_KEYS
+	NUM_KEYS    = int(TOTAL_KEYS)
 
-	key_array = make([]int, NUM_KEYS)
-	key_buff1 = make([]int, MAX_KEY)
-	key_buff2 = make([]int, NUM_KEYS)
+	key_array = make([]int64, NUM_KEYS)
+	key_buff1 = make([]int64, MAX_KEY)
+	key_buff2 = make([]int64, NUM_KEYS)
 	procs = runtime.NumCPU()
 
-	S_test_index_array := [TEST_ARRAY_SIZE]int{48427, 17148, 23627, 62548, 4431}
-	S_test_rank_array := [TEST_ARRAY_SIZE]int{0, 18, 346, 64917, 65463}
+	S_test_index_array := [TEST_ARRAY_SIZE]int64{48427, 17148, 23627, 62548, 4431}
+	S_test_rank_array := [TEST_ARRAY_SIZE]int64{0, 18, 346, 64917, 65463}
 
-	W_test_index_array := [TEST_ARRAY_SIZE]int{357773, 934767, 875723, 898999, 404505}
-	W_test_rank_array := [TEST_ARRAY_SIZE]int{1249, 11698, 1039987, 1043896, 1048018}
+	W_test_index_array := [TEST_ARRAY_SIZE]int64{357773, 934767, 875723, 898999, 404505}
+	W_test_rank_array := [TEST_ARRAY_SIZE]int64{1249, 11698, 1039987, 1043896, 1048018}
 
-	A_test_index_array := [TEST_ARRAY_SIZE]int{2112377, 662041, 5336171, 3642833, 4250760}
-	A_test_rank_array := [TEST_ARRAY_SIZE]int{104, 17523, 123928, 8288932, 8388264}
+	A_test_index_array := [TEST_ARRAY_SIZE]int64{2112377, 662041, 5336171, 3642833, 4250760}
+	A_test_rank_array := [TEST_ARRAY_SIZE]int64{104, 17523, 123928, 8288932, 8388264}
 
-	B_test_index_array := [TEST_ARRAY_SIZE]int{41869, 812306, 5102857, 18232239, 26860214}
-	B_test_rank_array := [TEST_ARRAY_SIZE]int{33422937, 10244, 59149, 33135281, 99}
+	B_test_index_array := [TEST_ARRAY_SIZE]int64{41869, 812306, 5102857, 18232239, 26860214}
+	B_test_rank_array := [TEST_ARRAY_SIZE]int64{33422937, 10244, 59149, 33135281, 99}
 
-	C_test_index_array := [TEST_ARRAY_SIZE]int{44172927, 72999161, 74326391, 129606274, 21736814}
-	C_test_rank_array := [TEST_ARRAY_SIZE]int{61147, 882988, 266290, 133997595, 133525895}
+	C_test_index_array := [TEST_ARRAY_SIZE]int64{44172927, 72999161, 74326391, 129606274, 21736814}
+	C_test_rank_array := [TEST_ARRAY_SIZE]int64{61147, 882988, 266290, 133997595, 133525895}
 
-	D_test_index_array := [TEST_ARRAY_SIZE]int{1317351170, 995930646, 1157283250, 1503301535, 1453734525}
-	D_test_rank_array := [TEST_ARRAY_SIZE]int{1, 36538729, 1978098519, 2145192618, 2147425337}
+	D_test_index_array := [TEST_ARRAY_SIZE]int64{1317351170, 995930646, 1157283250, 1503301535, 1453734525}
+	D_test_rank_array := [TEST_ARRAY_SIZE]int64{1, 36538729, 1978098519, 2145192618, 2147425337}
 
 	for i := 0; i < TEST_ARRAY_SIZE; i++ {
 		switch class {
@@ -129,9 +130,9 @@ func IS(class string) {
 	fmt.Printf("Size: %d\n", TOTAL_KEYS)
 	fmt.Printf("Iterations: %d\n", MAX_ITERATIONS)
 
-	key_buff_ptr_global = make([]int, MAX_KEY)
+	key_buff_ptr_global = make([]int64, MAX_KEY)
 
-	bucket_ptrs = make([]int, NUM_BUCKETS)
+	bucket_ptrs = make([]int64, NUM_BUCKETS)
 	
 	// create_seq part
 	var groupC_S sync.WaitGroup
@@ -180,37 +181,37 @@ func IS(class string) {
 		aux = false
 	}
 	
-	Mops := float64((MAX_ITERATIONS * TOTAL_KEYS)) / t.Seconds() / 1000000.0
+	Mops := float64((MAX_ITERATIONS * int(TOTAL_KEYS))) / t.Seconds() / 1000000.0
 
-	r.C_file_IS(aux, "IS", class, TOTAL_KEYS, MAX_ITERATIONS, Mops, &t)
+	r.C_file_IS(aux, "IS", class, int(TOTAL_KEYS), MAX_ITERATIONS, Mops, &t)
 	r.C_print_results(class, "Keys Ranked", MAX_ITERATIONS, aux, Mops, &t, runtime.NumCPU())
 }
 
 func create_seq(seed, a float64, myid int, group *sync.WaitGroup) {
 	var x, s float64
-	var mq, k1, k2, k int
+	var mq, k1, k2, k int64
 	var an float64 = a
 
 	defer (*group).Done()	
 	
-	mq = (NUM_KEYS + procs - 1) / procs
-	k1 = mq * myid
+	mq = (int64(NUM_KEYS) + int64(procs) - 1) / int64(procs)
+	k1 = mq * int64(myid)
 	k2 = k1 + mq
 
-	if k2 > NUM_KEYS {
-		k2 = NUM_KEYS
+	if k2 > int64(NUM_KEYS) {
+		k2 = int64(NUM_KEYS)
 	}
 
 	s = find_my_seed(myid, procs, int64(4*NUM_KEYS), seed, an)
 
-	k = MAX_KEY / 4
+	k = int64(MAX_KEY) / 4
 
 	for i := k1; i < k2; i++ {
 		x = r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
 		x += r.Orandlc(&s, &an)
-		key_array[i] = k * int(x)
+		key_array[i] = k * int64(x)
 	}
 }
 
@@ -245,9 +246,9 @@ func alloc_key_buff() {
 	
 	if USE_BUCKETS {
 
-		bucket_size = make([][]int, procs)
+		bucket_size = make([][]int64, procs)
 		for i := range bucket_size {
-			bucket_size[i] = make([]int, NUM_BUCKETS)
+			bucket_size[i] = make([]int64, NUM_BUCKETS)
 		}
 
 		for i := 0; i < NUM_KEYS; i++ {
@@ -255,30 +256,31 @@ func alloc_key_buff() {
 		}
 
 	} else {
-		key_buff1_aptr = make([][]int, procs)
+		key_buff1_aptr = make([][]int64, procs)
 		key_buff1_aptr[0] = key_buff1
 		for i := range key_buff1_aptr {
-			key_buff1_aptr[i] = make([]int, MAX_KEY)
+			key_buff1_aptr[i] = make([]int64, MAX_KEY)
 		}
 	}
 }
 
 func rank(iteration int, groupN *sync.WaitGroup) {
-	var k, k1, k2, shift, num_bucket_keys int
-	var key_buff_ptr, work_buff []int
-	var key_buff_ptr2 []int
+	var k, k1, k2, num_bucket_keys int64
+	var shift int
+	var key_buff_ptr, work_buff []int64
+	var key_buff_ptr2 []int64
 	
 	defer (*groupN).Done()
 	
 	myid := iteration
 	
 	if USE_BUCKETS {
-		shift = MAX_KEY_LOG_2 - NUM_BUCKETS_LOG
+		shift = int(MAX_KEY_LOG_2) -int(NUM_BUCKETS_LOG)
 		num_bucket_keys = 1 << shift
 	}
 
-	key_array[iteration] = iteration
-	key_array[iteration+MAX_ITERATIONS] = MAX_KEY - iteration
+	key_array[iteration] = int64(iteration)
+	key_array[iteration+MAX_ITERATIONS] = int64(MAX_KEY) - int64(iteration)
 
 	for i := 0; i < TEST_ARRAY_SIZE; i++ {
 		partial_verify_vals[i] = key_array[test_index_array[i]]
@@ -332,14 +334,14 @@ func rank(iteration int, groupN *sync.WaitGroup) {
 		}
 
 		for i := 0; i < NUM_BUCKETS; i++ {
-			k1 = i * num_bucket_keys
+			k1 = int64(i) * num_bucket_keys
 			k2 = k1 + num_bucket_keys
 
 			for j := k1; j < k2; j++ {
 				key_buff_ptr[j] = 0
 			}
 
-			var m int
+			var m int64
 			if i > 0 {
 				m = bucket_ptrs[i-1]
 			} else {
@@ -384,60 +386,60 @@ func rank(iteration int, groupN *sync.WaitGroup) {
 
 	for i := 0; i < TEST_ARRAY_SIZE; i++ {
 		k = partial_verify_vals[i]
-		if 0 < k && k <= NUM_KEYS-1 {
-			var key_rank int = key_buff_ptr[k-1]
-			var test_rank int = test_rank_array[i]
+		if 0 < k && k <= int64(NUM_KEYS)-1 {
+			var key_rank int64 = key_buff_ptr[k-1]
+			var test_rank int64 = test_rank_array[i]
 			var failed int = 0
 
 			switch classNPB {
 			case "S":
 				if i <= 2 {
-					test_rank += iteration
+					test_rank += int64(iteration)
 				} else {
-					test_rank -= iteration
+					test_rank -= int64(iteration)
 				}
 			case "W":
 				if i < 2 {
-					test_rank += iteration - 2
+					test_rank += int64(iteration) - 2
 				} else {
-					test_rank -= iteration
+					test_rank -= int64(iteration)
 				}
 			case "A":
 				if i <= 2 {
-					test_rank += iteration - 1
+					test_rank += int64(iteration) - 1
 				} else {
-					test_rank -= iteration - 1
+					test_rank -= int64(iteration) - 1
 				}
 			case "B":
 				if i == 1 || i == 2 || i == 4 {
-					test_rank += iteration
+					test_rank += int64(iteration)
 				} else {
-					test_rank -= iteration
+					test_rank -= int64(iteration)
 				}
 			case "C":
 				if i <= 2 {
-					test_rank += iteration
+					test_rank += int64(iteration)
 				} else {
-					test_rank -= iteration
+					test_rank -= int64(iteration)
 				}
 			case "D":
 				if i < 2 {
-					test_rank += iteration
+					test_rank += int64(iteration)
 				} else {
-					test_rank -= iteration
+					test_rank -= int64(iteration)
 				}
 			case "E":
 				if i < 2 {
-					test_rank += iteration - 2
+					test_rank += int64(iteration) - 2
 				}else if i == 2{
-					test_rank += iteration - 2
+					test_rank += int64(iteration) - 2
 					if iteration > 4{
 						test_rank -= 2
 					}else if iteration > 2 {
 						test_rank -= 1
 					}
 				}else{
-					test_rank -= iteration - 2
+					test_rank -= int64(iteration) - 2
 				}
 			}
 			
@@ -461,7 +463,7 @@ func rank(iteration int, groupN *sync.WaitGroup) {
 }
 
 func full_verify() {
-	var k, k1, k2, j int
+	var k, k1, k2, j int64
 	var myid, num_procs int
 
 	myid = 0
@@ -485,13 +487,13 @@ func full_verify() {
 			key_buff2[i] = key_array[i]
 		}
 
-		j = num_procs
-		j = (MAX_KEY + j - 1) / j
-		k1 = j * myid
+		j = int64(num_procs)
+		j = (int64(MAX_KEY) + j - 1) / j
+		k1 = j * int64(myid)
 		k2 = k1 + j
 
-		if k2 > MAX_KEY {
-			k2 = MAX_KEY
+		if k2 > int64(MAX_KEY) {
+			k2 = int64(MAX_KEY)
 		}
 
 		for i := 0; i < NUM_KEYS; i++ {
