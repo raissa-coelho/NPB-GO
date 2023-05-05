@@ -9,10 +9,10 @@ Benchmark Completed!
 Class = S
 Size = 65536
 Iterations = 10
-Time in seconds = 916.213µs
+Time in seconds = 671.53µs
 Total goroutines = 4
-Mop/s Total = 715.2921864238991
-Mop/s/goroutine  = 178.82304660597478
+Mop/s Total = 975.920658794097
+Mop/s/goroutine  = 243.98016469852425
 Operation type = keys ranked
 Verification = UNSUCCESSFUL
 Compiler Version = go1.19.5

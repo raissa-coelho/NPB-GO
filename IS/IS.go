@@ -2,13 +2,10 @@ package IS
 
 import (
 	r "NPB-GO/common"
-	"context"
 	"fmt"
-	"math/rand"
 	"runtime"
 	"time"
 	"sync"
-	"golang.org/x/sync/semaphore"
 )
 
 var (
@@ -22,6 +19,17 @@ var (
 	test_index_array    [TEST_ARRAY_SIZE]int
 	test_rank_array     [TEST_ARRAY_SIZE]int
 	procs               int
+	key_array           []int
+	key_buff1 	    []int
+	key_buff2 	    []int
+	key_buff1_aptr      [][]int
+	bucket_size         [][]int
+	key_buff_ptr_global []int
+	bucket_ptrs 	    []int
+	MAX_KEY     	    int 
+	NUM_BUCKETS         int 
+	NUM_KEYS            int
+	classNPB            string
 )
 
 const (
@@ -30,7 +38,9 @@ const (
 )
 
 func IS(class string) {
-
+	
+	classNPB = class
+	
 	if class == "S" {
 		TOTAL_KEYS_LOG_2 = 16
 		MAX_KEY_LOG_2 = 11
@@ -63,15 +73,13 @@ func IS(class string) {
 		TOTAL_KEYS = 1 << TOTAL_KEYS_LOG_2
 	}
 
-	var (
-		MAX_KEY     int = 1 << MAX_KEY_LOG_2
-		NUM_BUCKETS int = 1 << NUM_BUCKETS_LOG
-		NUM_KEYS    int = TOTAL_KEYS
-	)
+	MAX_KEY     = 1 << MAX_KEY_LOG_2
+	NUM_BUCKETS = 1 << NUM_BUCKETS_LOG
+	NUM_KEYS    = TOTAL_KEYS
 
-	key_array := make([]int, NUM_KEYS)
-	key_buff1 := make([]int, MAX_KEY)
-	key_buff2 := make([]int, NUM_KEYS)
+	key_array = make([]int, NUM_KEYS)
+	key_buff1 = make([]int, MAX_KEY)
+	key_buff2 = make([]int, NUM_KEYS)
 	procs = runtime.NumCPU()
 
 	S_test_index_array := [TEST_ARRAY_SIZE]int{48427, 17148, 23627, 62548, 4431}
@@ -121,81 +129,56 @@ func IS(class string) {
 	fmt.Printf("Size: %d\n", TOTAL_KEYS)
 	fmt.Printf("Iterations: %d\n", MAX_ITERATIONS)
 
-	//rand.Seed(time.Now().UnixNano())
-	//myid := rand.Intn(procs)
+	key_buff_ptr_global = make([]int, MAX_KEY)
 
-	key_buff1_aptr := make([][]int, procs)
-	for i := range key_buff1_aptr {
-		key_buff1_aptr[i] = make([]int, MAX_KEY)
-	}
-
-	bucket_size := make([][]int, procs)
-	for i := range bucket_size {
-		bucket_size[i] = make([]int, NUM_BUCKETS)
-	}
-
-	key_buff_ptr_global := make([]int, MAX_KEY)
-
-	bucket_ptrs := make([]int, NUM_BUCKETS)
-
-	fmt.Printf("Myid: %d\n", myid)
+	bucket_ptrs = make([]int, NUM_BUCKETS)
 	
 	// create_seq part
 	var groupC_S sync.WaitGroup
 	groupC_S.Add(procs)
 	for i := 0; i < procs; i++{
-		go create_seq(314159265.00, 1220703125.00, i, NUM_KEYS, MAX_KEY, procs, &groupC_S)
+		go create_seq(314159265.00, 1220703125.00, i, &groupC_S)
 	}
 	groupC_S.Wait()
 
 	// alloc_key_buff
-	alloc_key_buff(NUM_KEYS, key_buff1, key_buff2, key_buff1_aptr)
-
+	alloc_key_buff()
+	
+	var tmp sync.WaitGroup
+	tmp.Add(1)
+	go rank(1, &tmp)
+	tmp.Wait()
+	
 	passed_verification = 0
 
 	if class != "S" {
 		fmt.Println("iteration")
 	}
 
-	//var ch chan []int
-	ch := make(chan []int, MAX_KEY)
-	ch2 := make(chan []int, NUM_KEYS)
-	start := time.Now()
 	//main iteration
 	//CRITICAL
-	sem := semaphore.NewWeighted(int64(procs))
+	var groupR sync.WaitGroup
+	groupR.Add(procs)
+	
+	start := time.Now()
 	for iteration := 1; iteration <= MAX_ITERATIONS; iteration++ {
-		sem.Acquire(context.Background(), 1)
 		if class != "S" {
 			fmt.Printf("%d\n", iteration)
 		}
-		ch <- key_buff_ptr_global
-		ch2 <- key_array
-		go rank(iteration, myid, NUM_KEYS, NUM_BUCKETS, ch2, key_buff1, key_buff2, bucket_ptrs, MAX_KEY, class, key_buff1_aptr, bucket_size, key_buff_ptr_global, ch)
-		key_array = <-ch2
-		key_buff_ptr_global = <-ch
-		sem.Release(1)
+		go rank(iteration, &groupR)
 	}
-	defer close(ch)
-	defer close(ch2)
+	groupR.Wait()
 	stop := time.Now()
 	t := stop.Sub(start)
-	//wg.Wait()
 
 	// This tests that keys are in sequence
-	 temp01 := full_verify(myid,procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS, key_buff1, key_buff2, key_array[:], bucket_ptrs, key_buff_ptr_global[:])
-	
-	passed_verification += temp01
-	fmt.Printf("Passed verification: %d\n", passed_verification)
-	fmt.Printf("vvv: %d\n", ((5*MAX_ITERATIONS)+1))
-	
+	full_verify()
+
 	var aux bool = true
 	if passed_verification != ((5*MAX_ITERATIONS)+1) {
 		passed_verification = 0
 		aux = false
 	}
-	
-	fmt.Printf("Passed verification: %d\n", passed_verification)
 	
 	Mops := float64((MAX_ITERATIONS * TOTAL_KEYS)) / t.Seconds() / 1000000.0
 
@@ -203,7 +186,7 @@ func IS(class string) {
 	r.C_print_results(class, "Keys Ranked", MAX_ITERATIONS, aux, Mops, &t, runtime.NumCPU())
 }
 
-func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY, procs int, group *sync.WaitGroup) {
+func create_seq(seed, a float64, myid int, group *sync.WaitGroup) {
 	var x, s float64
 	var mq, k1, k2, k int
 	var an float64 = a
@@ -258,29 +241,37 @@ func find_my_seed(kn, np int, nn int64, s, a float64) float64 {
 	return t1
 }
 
-func alloc_key_buff(NUM_KEYS int, key_buff1, key_buff2 []int, key_buff1_aptr [][]int) {
-
+func alloc_key_buff() {
+	
 	if USE_BUCKETS {
+
+		bucket_size = make([][]int, procs)
+		for i := range bucket_size {
+			bucket_size[i] = make([]int, NUM_BUCKETS)
+		}
 
 		for i := 0; i < NUM_KEYS; i++ {
 			key_buff2[i] = 0
 		}
 
 	} else {
-
+		key_buff1_aptr = make([][]int, procs)
 		key_buff1_aptr[0] = key_buff1
-
+		for i := range key_buff1_aptr {
+			key_buff1_aptr[i] = make([]int, MAX_KEY)
+		}
 	}
 }
 
-func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1, key_buff2, bucket_ptrs []int, MAX_KEY int, class string, key_buff1_aptr, bucket_size [][]int, key_buff_ptr_global []int, ch chan []int) {
+func rank(iteration int, groupN *sync.WaitGroup) {
 	var k, k1, k2, shift, num_bucket_keys int
 	var key_buff_ptr, work_buff []int
 	var key_buff_ptr2 []int
-
-	key_array := make([]int, NUM_KEYS)
-	key_array = <-ch2
-
+	
+	defer (*groupN).Done()
+	
+	myid := iteration
+	
 	if USE_BUCKETS {
 		shift = MAX_KEY_LOG_2 - NUM_BUCKETS_LOG
 		num_bucket_keys = 1 << shift
@@ -294,14 +285,14 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 	}
 
 	if USE_BUCKETS {
-		key_buff_ptr2 = key_buff2
+		key_buff_ptr2 = key_buff2[:]
 	} else {
-		key_buff_ptr2 = key_array
+		key_buff_ptr2 = key_array[:]
 	}
-	key_buff_ptr = key_buff1
+	key_buff_ptr = key_buff1[:]
 
 	if USE_BUCKETS {
-
+		
 		work_buff = bucket_size[myid]
 
 		for i := 0; i < NUM_BUCKETS; i++ {
@@ -319,7 +310,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 
 		for i := 1; i < NUM_BUCKETS; i++ {
 			bucket_ptrs[i] = bucket_ptrs[i-1]
-			for k := 0; k < NUM_KEYS; k++ {
+			for k := 0; k < myid; k++ {
 				bucket_ptrs[i] += bucket_size[k][i]
 			}
 			for k := myid; k < procs; k++ {
@@ -356,7 +347,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 			}
 
 			for k := m; k < bucket_ptrs[i]; k++ {
-				key_buff_ptr[key_buff_ptr2[k]] = key_buff_ptr[key_buff_ptr2[k]] + 1
+				key_buff_ptr[key_buff_ptr2[k]]++
 			}
 
 			key_buff_ptr[k1] += m
@@ -378,7 +369,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 
 		// passa para o work_buff os valores
 		for i := 0; i < NUM_KEYS; i++ {
-			work_buff[key_buff_ptr2[i]] = work_buff[key_buff_ptr2[i]] + 1
+			work_buff[key_buff_ptr2[i]]++
 		}
 		for i := 0; i < MAX_KEY-1; i++ {
 			work_buff[i+1] += work_buff[i]
@@ -398,7 +389,7 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 			var test_rank int = test_rank_array[i]
 			var failed int = 0
 
-			switch class {
+			switch classNPB {
 			case "S":
 				if i <= 2 {
 					test_rank += iteration
@@ -464,21 +455,17 @@ func rank(iteration, myid, NUM_KEYS, NUM_BUCKETS int, ch2 chan []int, key_buff1,
 		}
 	}
 
-	var t []int
-
 	if iteration == MAX_ITERATIONS {
-		t = key_buff_ptr
+		key_buff_ptr_global = key_buff_ptr[:]
 	}
-
-	ch <- t
 }
 
-func full_verify(myid,num_procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, key_buff2 []int, key_array []int, bucket_ptrs, key_buff_ptr_global []int) int {
+func full_verify() {
 	var k, k1, k2, j int
-	//var myid, num_procs int
+	var myid, num_procs int
 
-	//myid = 0
-	//num_procs = 1
+	myid = 0
+	num_procs = 1
 
 	if USE_BUCKETS {
 		for i := 0; i < NUM_BUCKETS; i++ {
@@ -501,10 +488,6 @@ func full_verify(myid,num_procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, k
 		j = num_procs
 		j = (MAX_KEY + j - 1) / j
 		k1 = j * myid
-
-		//j = MAX_KEY
-		//k1 = 0
-		
 		k2 = k1 + j
 
 		if k2 > MAX_KEY {
@@ -532,5 +515,4 @@ func full_verify(myid,num_procs,NUM_KEYS, MAX_KEY, NUM_BUCKETS int, key_buff1, k
 	} else {
 		passed_verification++
 	}
-	return passed_verification
 }
