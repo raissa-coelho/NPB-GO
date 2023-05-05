@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"runtime"
 	"time"
-
+	"sync"
 	"golang.org/x/sync/semaphore"
 )
 
@@ -121,8 +121,8 @@ func IS(class string) {
 	fmt.Printf("Size: %d\n", TOTAL_KEYS)
 	fmt.Printf("Iterations: %d\n", MAX_ITERATIONS)
 
-	rand.Seed(time.Now().UnixNano())
-	myid := rand.Intn(procs)
+	//rand.Seed(time.Now().UnixNano())
+	//myid := rand.Intn(procs)
 
 	key_buff1_aptr := make([][]int, procs)
 	for i := range key_buff1_aptr {
@@ -139,15 +139,16 @@ func IS(class string) {
 	bucket_ptrs := make([]int, NUM_BUCKETS)
 
 	fmt.Printf("Myid: %d\n", myid)
+	
+	// create_seq part
+	var groupC_S sync.WaitGroup
+	groupC_S.Add(procs)
+	for i := 0; i < procs; i++{
+		go create_seq(314159265.00, 1220703125.00, i, NUM_KEYS, MAX_KEY, procs, &groupC_S)
+	}
+	groupC_S.Wait()
 
-	ch_CreatSEQ := make(chan []int, NUM_KEYS)
-
-	semm := semaphore.NewWeighted(int64(procs))
-	semm.Acquire(context.Background(), 1)
-	go create_seq(314159265.00, 1220703125.00, myid, NUM_KEYS, MAX_KEY, procs, ch_CreatSEQ)
-	key_array = <-ch_CreatSEQ
-	semm.Release(1)
-
+	// alloc_key_buff
 	alloc_key_buff(NUM_KEYS, key_buff1, key_buff2, key_buff1_aptr)
 
 	passed_verification = 0
@@ -202,13 +203,13 @@ func IS(class string) {
 	r.C_print_results(class, "Keys Ranked", MAX_ITERATIONS, aux, Mops, &t, runtime.NumCPU())
 }
 
-func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY, procs int, ch chan []int) {
+func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY, procs int, group *sync.WaitGroup) {
 	var x, s float64
 	var mq, k1, k2, k int
 	var an float64 = a
 
-	key_array := make([]int, NUM_KEYS)
-
+	defer (*group).Done()	
+	
 	mq = (NUM_KEYS + procs - 1) / procs
 	k1 = mq * myid
 	k2 = k1 + mq
@@ -228,7 +229,6 @@ func create_seq(seed, a float64, myid, NUM_KEYS, MAX_KEY, procs int, ch chan []i
 		x += r.Orandlc(&s, &an)
 		key_array[i] = k * int(x)
 	}
-	ch <- key_array
 }
 
 func find_my_seed(kn, np int, nn int64, s, a float64) float64 {
